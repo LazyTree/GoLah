@@ -24,7 +24,7 @@ namespace GoLah.Model
         /// <summary>
         /// Reference code for first bus stop in this service’s route sequence. 
         /// </summary>
-        //public BusStatus Status { get; set; }
+        public BusStatus Status { get; set; }
 
         /// <summary>
         /// Bus stop code for first bus stop.

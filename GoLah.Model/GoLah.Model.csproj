@@ -110,6 +110,7 @@
     <Compile Include="ArrivalBusService.cs" />
     <Compile Include="BusService.cs" />
     <Compile Include="BusServiceCategory.cs" />
+    <Compile Include="BusStatus.cs" />
     <Compile Include="BusStop.cs" />
     <Compile Include="NextBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
