@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoLah.Model
 {
-    public class BusInfo
+    public class Bus
     {
     }
 }
