@@ -107,8 +107,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusInfo.cs" />
-    <Compile Include="BusStopInfo.cs" />
+    <Compile Include="Bus.cs" />
+    <Compile Include="BusStop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GoLah.Common.rd.xml" />
   </ItemGroup>
