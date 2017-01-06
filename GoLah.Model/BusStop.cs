@@ -7,51 +7,33 @@ using Windows.Devices.Geolocation;
 
 namespace GoLah.Model
 {
+    /// <summary>
+    /// Bus stop information.
+    /// </summary>
     public class BusStop
     {
-        private string _code;
-        private string _roadName;
-        private string _description;
-        private Geocoordinate _location;
-        
-        public BusStop(string code, string roadName, string description, Geocoordinate location)
-        {
-            _code = code;
-            _roadName = roadName;
-            _description = description;
-            _location = location;
-        }
+        #region Properties
 
-        public string Code
-        {
-            get
-            {
-                return _code;
-            }
-        }
+        /// <summary>
+        /// The unique 5-digit identifier for this physical bus stop.
+        /// </summary>
+        public string Code { get; set; }
 
-        public string RoadName
-        {
-            get
-            {
-                return _roadName;
-            }
-        }
+        /// <summary>
+        /// The road on which this bus stop is located.
+        /// </summary>
+        public string RoadName { get; set; }
 
-        public string Description
-        {
-            get
-            {
-                return _description;
-            }
-        }
+        /// <summary>
+        /// Landmarks next to the bus stop (if any) to aid in identifying this bus stop.
+        /// </summary>
+        public string Description { get; set; }
 
-        public Geocoordinate Location
-        {
-            get
-            {
-                return _location;
-            }
-        }
+        /// <summary>
+        /// Location coordinates for this bus stop.
+        /// </summary>
+        public Geocoordinate Location { get; set; }
+
+        #endregion
     }
 }
