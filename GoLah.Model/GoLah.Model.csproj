@@ -107,11 +107,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums.cs" />
-    <Compile Include="NextBus.cs" />
-    <Compile Include="BusService.cs" />
+    <Compile Include="Bus.cs" />
     <Compile Include="BusStop.cs" />
-    <Compile Include="GeoLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GoLah.Common.rd.xml" />
   </ItemGroup>
