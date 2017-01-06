@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace GoLah.Model
 {
-    public class BusInfo
+    public class GeoLocation
     {
+        public double Longtitude { get; set; }
+
+        public double Latitude { get; set; }
     }
 }
