@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoLah.Apps", "GoLah.Apps\Go
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoLah.Model", "GoLah.Model\GoLah.Model.csproj", "{F25E4011-3930-4955-9078-D32148026505}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Golah.ViewModel", "Golah.ViewModel\Golah.ViewModel.csproj", "{6879507D-B8C4-46DC-8FFE-F11511153A42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoLah.ViewModel", "Golah.ViewModel\GoLah.ViewModel.csproj", "{6879507D-B8C4-46DC-8FFE-F11511153A42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Golah.Services", "Golah.Services\Golah.Services.csproj", "{8FDB6BBE-3987-4655-A784-01FDB59BB156}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoLah.Services", "Golah.Services\GoLah.Services.csproj", "{8FDB6BBE-3987-4655-A784-01FDB59BB156}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

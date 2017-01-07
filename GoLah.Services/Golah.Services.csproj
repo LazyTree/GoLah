@@ -7,8 +7,8 @@
     <ProjectGuid>{8FDB6BBE-3987-4655-A784-01FDB59BB156}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Golah.Services</RootNamespace>
-    <AssemblyName>Golah.Services</AssemblyName>
+    <RootNamespace>GoLah.Services</RootNamespace>
+    <AssemblyName>GoLah.Services</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>

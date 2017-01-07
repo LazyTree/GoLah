@@ -7,8 +7,8 @@
     <ProjectGuid>{6879507D-B8C4-46DC-8FFE-F11511153A42}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Golah.ViewModel</RootNamespace>
-    <AssemblyName>Golah.ViewModel</AssemblyName>
+    <RootNamespace>GoLah.ViewModel</RootNamespace>
+    <AssemblyName>GoLah.ViewModel</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
