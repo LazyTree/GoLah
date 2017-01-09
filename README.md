@@ -1,2 +1,2 @@
 # GoLah
-UWP learning project based on LTA next bus information
+UWP learning project using LTA’s datasets and APIs.
