@@ -16,8 +16,14 @@ namespace GoLah.ViewModel
     {
         #region Fields
 
+        private const int BUS_STOP_CODE_LENGTH = 5;
+
         private string _busStopCode = string.Empty;
-        private ObservableCollection<ArrivalBusService> _arrivalBusServices = new ObservableCollection<ArrivalBusService>();
+
+        private ObservableCollection<ArrivalBusService> _arrivalBusServices
+            = new ObservableCollection<ArrivalBusService>();
+
+        private ArrivalBusService _selectedBusService;
 
         #endregion
 
@@ -41,6 +47,17 @@ namespace GoLah.ViewModel
         }
 
         /// <summary>
+        /// Bus stop code length.
+        /// </summary>
+        public int BusStopCodeLength
+        {
+            get
+            {
+                return BUS_STOP_CODE_LENGTH;
+            }
+        }
+
+        /// <summary>
         /// Arrival bus services for the given <see cref="BusStopCode"/>
         /// </summary>
         public ObservableCollection<ArrivalBusService> ArrivalBusServices
@@ -55,6 +72,22 @@ namespace GoLah.ViewModel
             }
         }
 
+        /// <summary>
+        /// Selected bus service.
+        /// This should be one of the item in <see cref="ArrivalBusServices"/>
+        /// </summary>
+        public ArrivalBusService SelectedBusService
+        {
+            get
+            {
+                return _selectedBusService;
+            }
+            set
+            {
+                Set(ref _selectedBusService, value);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -64,14 +97,18 @@ namespace GoLah.ViewModel
         /// </summary>
         private async void UpdateArrivalBusServices()
         {
-            ArrivalBusServices.Clear();
-
-            if (BusStopCode != null)
+            if (!string.IsNullOrEmpty(BusStopCode))
             {
                 var repository = new LtaDataRepository();
                 ArrivalBusServices = new ObservableCollection<ArrivalBusService>(
                     await repository.GetNextBusAsync(BusStopCode));
             }
+            else
+            {
+                ArrivalBusServices.Clear();
+            }
+
+            SelectedBusService = null;
         }
 
         #endregion

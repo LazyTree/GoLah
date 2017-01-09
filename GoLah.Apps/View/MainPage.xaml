@@ -13,16 +13,30 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
-            <TextBox Text="{Binding BusStopCode, Mode=TwoWay}" Margin="20" />
-            <ListBox ItemsSource="{Binding ArrivalBusServices}" Margin="10">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding ServiceNo, Mode=OneWay}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <TextBox Text="{Binding BusStopCode, Mode=TwoWay}" Margin="20" MaxLength="{Binding BusStopCodeLength}" />
+            <Grid Margin="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ListBox Grid.Row="0" Grid.Column="0"
+                        ItemsSource="{Binding ArrivalBusServices}" Margin="10" 
+                        SelectedItem="{Binding SelectedBusService}"
+                        Background="{ThemeResource ListBoxBackgroundThemeBrush}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding ServiceNo}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                    <TextBlock Text="{Binding SelectedBusService.ServiceNo}"></TextBlock>
+                    <TextBlock Text="{Binding SelectedBusService.Operator}"></TextBlock>
+                    <TextBlock Text="{Binding SelectedBusService.NextBus.EstimatedArrival}"></TextBlock>
+                </StackPanel>
+            </Grid>
         </StackPanel>
     </Grid>
 </Page>
