@@ -69,11 +69,11 @@ namespace GoLah.ViewModel
                 {
                     ArrivalBusServices.Add(new ArrivalBusService()
                     {
-                        ServiceNumber = "15"
+                        ServiceNo = "15"
                     });
                     ArrivalBusServices.Add(new ArrivalBusService()
                     {
-                        ServiceNumber = "150"
+                        ServiceNo = "150"
                     });
                 }
 

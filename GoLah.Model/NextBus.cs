@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,18 +16,22 @@ namespace GoLah.Model
         /// <summary>
         /// Ordinal value of the nth visit of this vehicle at this bus stop; 1=1st visit, 2=2nd visit.
         /// </summary>
-        public int VisitNumber { get; set; }
+        public string VisitNumber { get; set; }
 
         /// <summary>
         /// ETA date-time.
         /// </summary>
-        public DateTime EstimateArrival { get; set; }
+        public DateTime EstimatedArrival { get; set; }
 
         /// <summary>
         /// Estimated location coordinates of bus at point of published data.
         /// Values will be “0” if bus has yet to leave the interchange.
         /// </summary>
+        [JsonIgnore]
         public Geocoordinate Location { get; set; }
+
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
 
         /// <summary>
         /// Bus occupancy/crowding.

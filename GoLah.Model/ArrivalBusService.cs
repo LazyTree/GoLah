@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace GoLah.Model
         /// <summary>
         /// The bus service number.
         /// </summary>
-        public string ServiceNumber { get; set; }
+        public string ServiceNo { get; set; }
 
         /// <summary>
         /// Transport operator code.
@@ -24,7 +25,7 @@ namespace GoLah.Model
         /// <summary>
         /// Reference code for first bus stop in this service’s route sequence.
         /// </summary>
-        public BusStatus Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Bus stop code for first bus stop.
