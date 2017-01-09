@@ -13,8 +13,16 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
-            <TextBlock Text="{Binding TestString}" />
-            <TextBox Text="{Binding InputString, Mode=TwoWay}" />
+            <TextBox Text="{Binding BusStopCode, Mode=TwoWay}" Margin="20" />
+            <ListBox ItemsSource="{Binding ArrivalBusServices}" Margin="20">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ServiceNumber, Mode=OneWay}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
     </Grid>
 </Page>

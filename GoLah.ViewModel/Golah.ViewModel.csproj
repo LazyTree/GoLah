@@ -112,6 +112,12 @@
     <Compile Include="ViewModelBase.cs" />
     <EmbeddedResource Include="Properties\Golah.ViewModel.rd.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GoLah.Model\GoLah.Model.csproj">
+      <Project>{F25E4011-3930-4955-9078-D32148026505}</Project>
+      <Name>GoLah.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

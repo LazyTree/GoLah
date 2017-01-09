@@ -1,34 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GoLah.Model;
+
 
 namespace GoLah.ViewModel
 {
+    /// <summary>
+    /// View model for the main page.
+    /// </summary>
     public class MainPageViewModel : ViewModelBase
     {
-        private string testString = "Lazy3";
+        #region Fields
 
-        public string TestString
+        private string _busStopCode = string.Empty;
+        private ObservableCollection<ArrivalBusService> _arrivalBusServices = new ObservableCollection<ArrivalBusService>();
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Bus stop code to check for bus arrival.
+        /// </summary>
+        public string BusStopCode
         {
-            get { return testString; }
+            get
+            {
+                return _busStopCode;
+            }
             set
             {
-                Set(ref testString, value);
+                Set(ref _busStopCode, value.Trim());
+
+                UpdateArrivalBusServices();
             }
         }
 
-        private string inputString = "Lazy3Lazy3";
-
-        public string InputString
+        /// <summary>
+        /// Arrival bus services for the given <see cref="BusStopCode"/>
+        /// </summary>
+        public ObservableCollection<ArrivalBusService> ArrivalBusServices
         {
-            get { return inputString; }
-            set
+            get
             {
-                Set(ref inputString, value);
+                return _arrivalBusServices;
             }
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Update arrival bus services based on the bus stop code.
+        /// </summary>
+        private void UpdateArrivalBusServices()
+        {
+            ArrivalBusServices.Clear();
+
+            if (BusStopCode != null)
+            {
+                //TODO: Perform the actual query properly fill up the information.
+                if(BusStopCode.Equals("83139"))
+                {
+                    ArrivalBusServices.Add(new ArrivalBusService()
+                    {
+                        ServiceNumber = "15"
+                    });
+                    ArrivalBusServices.Add(new ArrivalBusService()
+                    {
+                        ServiceNumber = "150"
+                    });
+                }
+
+            }
+        }
+
+        #endregion
     }
 }
