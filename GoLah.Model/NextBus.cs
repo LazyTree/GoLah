@@ -29,7 +29,7 @@ namespace GoLah.Model
         public Geocoordinate Location { get; set; }
 
         /// <summary>
-        /// Bus occupancy / crowding.
+        /// Bus occupancy/crowding.
         /// </summary>
         public string Load { get; set; }
 

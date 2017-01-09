@@ -22,7 +22,7 @@ namespace GoLah.Model
         public string Operator { get; set; }
 
         /// <summary>
-        /// Reference code for first bus stop in this service’s route sequence. 
+        /// Reference code for first bus stop in this service’s route sequence.
         /// </summary>
         public BusStatus Status { get; set; }
 
@@ -32,7 +32,7 @@ namespace GoLah.Model
         public string OriginatingID { get; set; }
 
         /// <summary>
-        /// Reference code for last bus stop in this service’s route sequence. 
+        /// Reference code for last bus stop in this service’s route sequence.
         /// </summary>
         public string TerminatingID { get; set; }
 
