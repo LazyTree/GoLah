@@ -18,7 +18,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding ServiceNumber, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding ServiceNo, Mode=OneWay}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

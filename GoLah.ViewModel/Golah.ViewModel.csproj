@@ -117,6 +117,10 @@
       <Project>{F25E4011-3930-4955-9078-D32148026505}</Project>
       <Name>GoLah.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Golah.Services\GoLah.Services.csproj">
+      <Project>{8fdb6bbe-3987-4655-a784-01fdb59bb156}</Project>
+      <Name>GoLah.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

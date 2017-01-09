@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GoLah.Model;
-
+using GoLah.Services;
 
 namespace GoLah.ViewModel
 {
@@ -49,6 +49,10 @@ namespace GoLah.ViewModel
             {
                 return _arrivalBusServices;
             }
+            set
+            {
+                Set(ref _arrivalBusServices, value);
+            }
         }
 
         #endregion
@@ -58,25 +62,15 @@ namespace GoLah.ViewModel
         /// <summary>
         /// Update arrival bus services based on the bus stop code.
         /// </summary>
-        private void UpdateArrivalBusServices()
+        private async void UpdateArrivalBusServices()
         {
             ArrivalBusServices.Clear();
 
             if (BusStopCode != null)
             {
-                //TODO: Perform the actual query properly fill up the information.
-                if(BusStopCode.Equals("83139"))
-                {
-                    ArrivalBusServices.Add(new ArrivalBusService()
-                    {
-                        ServiceNo = "15"
-                    });
-                    ArrivalBusServices.Add(new ArrivalBusService()
-                    {
-                        ServiceNo = "150"
-                    });
-                }
-
+                var repository = new LtaDataRepository();
+                ArrivalBusServices = new ObservableCollection<ArrivalBusService>(
+                    await repository.GetNextBusAsync(BusStopCode));
             }
         }
 

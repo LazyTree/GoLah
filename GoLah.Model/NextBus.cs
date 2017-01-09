@@ -21,7 +21,7 @@ namespace GoLah.Model
         /// <summary>
         /// ETA date-time.
         /// </summary>
-        public DateTime EstimatedArrival { get; set; }
+        public DateTime? EstimatedArrival { get; set; }
 
         /// <summary>
         /// Estimated location coordinates of bus at point of published data.
