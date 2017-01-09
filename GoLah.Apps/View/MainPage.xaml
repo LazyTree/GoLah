@@ -14,7 +14,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
             <TextBox Text="{Binding BusStopCode, Mode=TwoWay}" Margin="20" />
-            <ListBox ItemsSource="{Binding ArrivalBusServices}" Margin="20">
+            <ListBox ItemsSource="{Binding ArrivalBusServices}" Margin="10">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
