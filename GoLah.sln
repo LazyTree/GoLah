@@ -13,6 +13,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoLah.Services", "Golah.Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoLah.Services.Tests", "GoLah.Services.Tests\GoLah.Services.Tests.csproj", "{08B93B66-C3F8-4A70-A7F3-894945E9A14B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Apps", "01 Apps", "{D2AFFA64-D020-46C1-A44D-AEB0F7D4C3A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 Tests", "02 Tests", "{5F978502-11B5-4179-832E-2E78BA4C3D74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 Solution Items", "03 Solution Items", "{95509F47-E8AD-4998-AE2B-6A8E89E06E33}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,5 +125,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3CABE11C-FEF8-46E1-B4C1-D687B1E8D138} = {D2AFFA64-D020-46C1-A44D-AEB0F7D4C3A4}
+		{F25E4011-3930-4955-9078-D32148026505} = {D2AFFA64-D020-46C1-A44D-AEB0F7D4C3A4}
+		{6879507D-B8C4-46DC-8FFE-F11511153A42} = {D2AFFA64-D020-46C1-A44D-AEB0F7D4C3A4}
+		{8FDB6BBE-3987-4655-A784-01FDB59BB156} = {D2AFFA64-D020-46C1-A44D-AEB0F7D4C3A4}
+		{08B93B66-C3F8-4A70-A7F3-894945E9A14B} = {5F978502-11B5-4179-832E-2E78BA4C3D74}
 	EndGlobalSection
 EndGlobal
