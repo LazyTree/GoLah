@@ -21,7 +21,7 @@
                 </Grid.ColumnDefinitions>
                 <ListBox Grid.Row="0" Grid.Column="0"
                         ItemsSource="{Binding ArrivalBusServices}" Margin="10" 
-                        SelectedItem="{Binding SelectedBusService}"
+                        SelectedItem="{Binding SelectedBusService, Mode=TwoWay}"
                         Background="{ThemeResource ListBoxBackgroundThemeBrush}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
