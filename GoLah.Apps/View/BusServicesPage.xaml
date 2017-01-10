@@ -1,0 +1,43 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GoLah.Apps.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ViewModel="using:GoLah.ViewModel"
+    x:Class="GoLah.Apps.View.BusServicesPage"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <DataTemplate x:Key="BusServiceTemplate">
+            <Grid Height="100" Width="320">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding ServiceNumber}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock x:Name="TbOrigin" Text="Origin" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OriginCode}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBlock x:Name="TbDest" Text="Destination" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DestinationCode}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <ViewModel:BusServicesPageViewModel/>
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="BusServices" Grid.Column="0" ItemsSource="{Binding AllBusServices, Mode=TwoWay}" ItemTemplate="{StaticResource BusServiceTemplate}"/>
+    </Grid>
+</Page>

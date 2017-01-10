@@ -20,9 +20,6 @@ namespace GoLah.ViewModel
 
         private string _busStopCode = string.Empty;
 
-        private ObservableCollection<ArrivalBusService> _arrivalBusServices
-            = new ObservableCollection<ArrivalBusService>();
-
         private ArrivalBusService _selectedBusService;
 
         #endregion
@@ -58,21 +55,6 @@ namespace GoLah.ViewModel
         }
 
         /// <summary>
-        /// Arrival bus services for the given <see cref="BusStopCode"/>
-        /// </summary>
-        public ObservableCollection<ArrivalBusService> ArrivalBusServices
-        {
-            get
-            {
-                return _arrivalBusServices;
-            }
-            set
-            {
-                Set(ref _arrivalBusServices, value);
-            }
-        }
-
-        /// <summary>
         /// Selected bus service.
         /// This should be one of the item in <see cref="ArrivalBusServices"/>
         /// </summary>
@@ -97,18 +79,18 @@ namespace GoLah.ViewModel
         /// </summary>
         private async void UpdateArrivalBusServices()
         {
-            if (!string.IsNullOrEmpty(BusStopCode))
-            {
-                var repository = new LtaDataRepository();
-                ArrivalBusServices = new ObservableCollection<ArrivalBusService>(
-                    await repository.GetNextBusAsync(BusStopCode));
-            }
-            else
-            {
-                ArrivalBusServices.Clear();
-            }
+            //if (!string.IsNullOrEmpty(BusStopCode))
+            //{
+            //    var repository = new LtaDataRepository();
+            //    ArrivalBusServices = new ObservableCollection<ArrivalBusService>(
+            //        await repository.GetNextBusAsync(BusStopCode));
+            //}
+            //else
+            //{
+            //    ArrivalBusServices.Clear();
+            //}
 
-            SelectedBusService = null;
+            //SelectedBusService = null;
         }
 
         #endregion

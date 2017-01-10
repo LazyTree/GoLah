@@ -11,32 +11,12 @@
         <ViewModel:MainPageViewModel/>
     </Page.DataContext>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-            <TextBox Text="{Binding BusStopCode, Mode=TwoWay}" Margin="20" MaxLength="{Binding BusStopCodeLength}" />
-            <Grid Margin="20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <ListBox Grid.Row="0" Grid.Column="0"
-                        ItemsSource="{Binding ArrivalBusServices}" Margin="10" 
-                        SelectedItem="{Binding SelectedBusService, Mode=TwoWay}"
-                        Background="{ThemeResource ListBoxBackgroundThemeBrush}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding ServiceNo}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
-                    <TextBlock Text="{Binding SelectedBusService.ServiceNo}"></TextBlock>
-                    <TextBlock Text="{Binding SelectedBusService.Operator}"></TextBlock>
-                    <TextBlock Text="{Binding SelectedBusService.NextBus.EstimatedArrival}"></TextBlock>
-                </StackPanel>
-            </Grid>
-        </StackPanel>
+    <Grid Background="#FFFFFFFF">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="BtnBusServices" Grid.Column="0" Content="Bus Services" Click="BtnBusServices_Click"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="200" Height="100" FontSize="20" Background="#3337BF19"/>
+        <Button x:Name="BtnBusStops" Grid.Column="1" Content="Bus Stops" Click="BtnBusStops_Click" VerticalAlignment="Center" HorizontalAlignment="Center" Width="200" Height="100" FontSize="20" Background="#3337BF19"/>
     </Grid>
 </Page>
