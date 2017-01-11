@@ -14,12 +14,17 @@ namespace GoLah.Services
     public class LtaDataRepository
     {
         private const string URI = @"http://datamall2.mytransport.sg/ltaodataservice/";
-        private string key = @"4DZEmxtLQOmpRFW8vgqmTA==";
-        private string accept = "application/json";
+        private const string key = @"4DZEmxtLQOmpRFW8vgqmTA==";
+        private const string accept = "application/json";
 
         private const string BUS_STOPS = "BusStops";
         private const string BUS_SERVICES = "BusServices";
         private const string BUS_ARRIVAL = "BusArrival?BusStopID={0}";
+        private const string PAGING_SKIP = @"?$skip={0}";
+        private const int PAGE_SIZE = 50;
+
+        private List<BusService> _cachedBusServices = new List<BusService>();
+        private List<BusStop> _cachedBusStops = new List<BusStop>();
 
         private async Task<string> GetResponseStringAsync(string url)
         {
@@ -37,15 +42,86 @@ namespace GoLah.Services
             }
         }
 
-        public async Task<IEnumerable<BusStop>> GetBusStopsAsync()
+        /// <summary>
+        /// Get all bus stops.
+        /// </summary>
+        /// <param name="useCache">True to get cached result. False to get fresh result.</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<BusStop>> GetBusStopsAsync(bool useCache)
         {
-            var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_STOPS));
+            if (useCache && _cachedBusStops.Count > 0)
+            {
+                return _cachedBusStops;
+            }
+
+            int page = 0;
+            IEnumerable<BusStop> result;
+            _cachedBusServices.Clear();
+            do
+            {
+                result = await GetBusStopsByPageAsync(page);
+                _cachedBusStops.AddRange(result);
+                page += PAGE_SIZE;
+            }
+            while (result.Count() == PAGE_SIZE);
+            return _cachedBusStops;
+        }
+
+        /// <summary>
+        /// Get the bus stops by page (50 records per page)
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<BusStop>> GetBusStopsByPageAsync(int page)
+        {
+            var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_STOPS, page == 0 ? string.Empty : string.Format(PAGING_SKIP, page)));
             return JsonConvert.DeserializeObject<OData<BusStop>>(jsonString)?.Value;
         }
 
-        public async Task<IEnumerable<BusService>> GetBusServicesAsync()
+        /// <summary>
+        /// Get the all bus services.
+        /// </summary>
+        /// <param name="useCache">True to get cached result. False to get fresh result.</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<BusService>> GetBusServicesAsync(bool useCache)
         {
-            var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_SERVICES));
+            if(useCache && _cachedBusServices.Count > 0)
+            {
+                return _cachedBusServices;
+            }
+
+            int page = 0;
+            IEnumerable<BusService> result;
+            _cachedBusServices.Clear();
+            do
+            {
+                result = await GetBusServicesByPageAsync(page);
+                _cachedBusServices.AddRange(result.ToList());
+                page += PAGE_SIZE;
+            }
+            while (result.Count() == PAGE_SIZE);
+            return _cachedBusServices;
+        }
+
+        /// <summary>
+        /// Get the bus service by page (50 records per page)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<BusService>> GetBusServicesByPageAsync(int page)
+        {
+            var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_SERVICES, page == 0 ? string.Empty : string.Format(PAGING_SKIP, page)));
+            jsonString = jsonString.Replace("NIGHT SERVICE", "NightService")
+                .Replace("FLAT FARE $1.00", "FlatFee_1_00")
+                .Replace("FLAT FARE $1.80", "FlatFee_1_80")
+                .Replace("FLAT FARE $2.00", "FlatFee_2_00")
+                .Replace("FLAT FARE $2.70", "FlatFee_2_70")
+                .Replace("FLAT FARE $3.50", "FlatFee_3_50")
+                .Replace("FLAT FARE $4.00", "FlatFee_4_00")
+                .Replace("FLAT FARE $4.20", "FlatFee_4_20")
+                .Replace("FLAT FARE $4.50", "FlatFee_4_50")
+                .Replace("FLAT FARE $5.00", "FlatFee_5_00")
+                .Replace("INTRA-TOWN", "IntraTown")
+                .Replace("NIGHT RIDER", "NightRider");
             return JsonConvert.DeserializeObject<OData<BusService>>(jsonString)?.Value;
         }
 
@@ -54,15 +130,5 @@ namespace GoLah.Services
             var jsonString = await GetResponseStringAsync(string.Concat(URI, string.Format(BUS_ARRIVAL, busStopId)));
             return JsonConvert.DeserializeObject<BusArrivalOData>(jsonString)?.Services;
         }
-
-        /* ToDo: Generic implementation
-        public async Task<IEnumerable<ILtaData>> GetLtaDataAsync(Type ltaDataType)
-        {
-            if (ltaDataType == null || ltaDataType != typeof(ILtaData))
-                return Enumerable.Empty<ILtaData>();
-            var jsonString = await GetResponseStringAsync(string.Concat(URI, ltaDataType.FullName, "s"));
-            return JsonConvert.DeserializeObject<OData<ILtaData>>(jsonString)?.Value;
-        }
-        */
     }
 }

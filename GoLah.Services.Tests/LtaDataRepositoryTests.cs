@@ -13,16 +13,16 @@ namespace GoLah.Services.Tests
         public async Task GetBusStopssAsync()
         {
             var repository = new LtaDataRepository();
-            var result = new List<BusStop>(await repository.GetBusStopsAsync());
-            Assert.AreEqual(50, result.Count);
+            var result = new List<BusStop>(await repository.GetBusStopsAsync(false));
+            Assert.IsTrue(result.Count > 5000);
         }
 
         [TestMethod]
         public async Task GetBusServicesAsync()
         {
             var repository = new LtaDataRepository();
-            var result = new List<BusService>(await repository.GetBusServicesAsync());
-            Assert.AreEqual(50, result.Count);
+            var result = new List<BusService>(await repository.GetBusServicesAsync(false));
+            Assert.IsTrue(result.Count > 200);
         }
 
         [TestMethod]
