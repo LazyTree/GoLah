@@ -24,7 +24,7 @@ namespace GoLah.ViewModel
                     new BusService
                     {
                         ServiceNo = "112e",
-                        Category = BusServiceCategory.FlatFee,
+                        Category = BusServiceCategory.FlatFee_1_10,
                         Operator ="SBS",
                         OriginCode = "123",
                         DestinationCode = "456"
@@ -78,7 +78,7 @@ namespace GoLah.ViewModel
         {
             var repository = new LtaDataRepository();
             AllBusServices = new ObservableCollection<BusService>(
-                await repository.GetBusServicesAsync(false));   
+                await repository.GetBusServicesAsync());   
         }
     }
 }
