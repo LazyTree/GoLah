@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoLah.BackgroundService;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace GoLah.Apps
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            GoLahBackgroundTask.Register();
 //#if DEBUG
 //            if (System.Diagnostics.Debugger.IsAttached)
 //            {

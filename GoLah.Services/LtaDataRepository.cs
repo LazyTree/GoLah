@@ -116,6 +116,11 @@ namespace GoLah.Services
             return JsonConvert.DeserializeObject<OData<BusService>>(jsonString)?.Value;
         }
 
+        /// <summary>
+        /// Get bus arrival info.
+        /// </summary>
+        /// <param name="busStopId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<ArrivalBusService>> GetNextBusAsync(string busStopId)
         {
             var jsonString = await GetResponseStringAsync(string.Concat(URI, string.Format(BUS_ARRIVAL, busStopId)));
