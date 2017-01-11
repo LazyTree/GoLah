@@ -1,0 +1,15 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GoLah.Apps.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    x:Class="GoLah.Apps.MapPage"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Maps:MapControl x:Name="myMap" MapServiceToken="26gqF2PKczATeqP4NL59~nQHrkiTXAN5BGCXl7ttS5Q~An_3ymPGsLumNz-EPvWc1fPWtWMfPK4jGCmDWnlVKC62QWMcwupCCwqJ0VNKwHKI"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+    </Grid>
+</Page>

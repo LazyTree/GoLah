@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using GoLah.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GoLah.Model
+namespace GoLah.Services
 {
     public class OData<T>
     {

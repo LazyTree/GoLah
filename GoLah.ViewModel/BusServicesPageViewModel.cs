@@ -23,7 +23,7 @@ namespace GoLah.ViewModel
                 {
                     new BusService
                     {
-                        ServiceNumber = "112e",
+                        ServiceNo = "112e",
                         Category = BusServiceCategory.FlatFee_1_10,
                         Operator ="SBS",
                         OriginCode = "123",
@@ -31,7 +31,7 @@ namespace GoLah.ViewModel
                     },
                     new BusService
                     {
-                        ServiceNumber = "857",
+                        ServiceNo = "857",
                         Category = BusServiceCategory.Express,
                         Operator ="SMART",
                         OriginCode = "123",
@@ -39,7 +39,7 @@ namespace GoLah.ViewModel
                     },
                     new BusService
                     {
-                        ServiceNumber = "858",
+                        ServiceNo = "858",
                         Category = BusServiceCategory.Feeder,
                         Operator ="SMRT",
                         OriginCode = "123",

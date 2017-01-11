@@ -16,7 +16,7 @@ namespace GoLah.Model
         /// <summary>
         /// The bus service number.
         /// </summary>
-        public string ServiceNumber { get; set; }
+        public string ServiceNo { get; set; }
 
         /// <summary>
         /// Operator for this bus service.
