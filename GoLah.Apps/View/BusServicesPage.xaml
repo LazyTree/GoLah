@@ -18,12 +18,14 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding ServiceNo}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding ServiceNo}" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock x:Name="TbOrigin" Text="Origin" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OriginCode}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 <TextBlock x:Name="TbDest" Text="Destination" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DestinationCode}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Category}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
 
             </Grid>
         </DataTemplate>

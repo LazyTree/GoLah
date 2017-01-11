@@ -24,7 +24,7 @@ namespace GoLah.ViewModel
                     new BusService
                     {
                         ServiceNo = "112e",
-                        Category = BusServiceCategory.FlatFee_1_00,
+                        Category = BusServiceCategory.FlatFee,
                         Operator ="SBS",
                         OriginCode = "123",
                         DestinationCode = "456"

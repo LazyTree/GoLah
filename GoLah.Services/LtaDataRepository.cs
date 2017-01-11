@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GoLah.Services
@@ -110,18 +111,8 @@ namespace GoLah.Services
         public async Task<IEnumerable<BusService>> GetBusServicesByPageAsync(int page)
         {
             var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_SERVICES, page == 0 ? string.Empty : string.Format(PAGING_SKIP, page)));
-            jsonString = jsonString.Replace("NIGHT SERVICE", "NightService")
-                .Replace("FLAT FARE $1.00", "FlatFee_1_00")
-                .Replace("FLAT FARE $1.80", "FlatFee_1_80")
-                .Replace("FLAT FARE $2.00", "FlatFee_2_00")
-                .Replace("FLAT FARE $2.70", "FlatFee_2_70")
-                .Replace("FLAT FARE $3.50", "FlatFee_3_50")
-                .Replace("FLAT FARE $4.00", "FlatFee_4_00")
-                .Replace("FLAT FARE $4.20", "FlatFee_4_20")
-                .Replace("FLAT FARE $4.50", "FlatFee_4_50")
-                .Replace("FLAT FARE $5.00", "FlatFee_5_00")
-                .Replace("INTRA-TOWN", "IntraTown")
-                .Replace("NIGHT RIDER", "NightRider");
+            var pattern = "(FLAT FARE \\$[0-9]+(?:\\.[0-9][0-9])?)(?![\\d])";
+            jsonString = Regex.Replace(jsonString, pattern, "FlatFee");
             return JsonConvert.DeserializeObject<OData<BusService>>(jsonString)?.Value;
         }
 
