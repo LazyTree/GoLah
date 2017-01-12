@@ -71,6 +71,13 @@ namespace GoLah.Model
         /// </summary>
         public string LoopDescription { get; set; }
 
+        public bool IsLoop
+        {
+            get
+            {
+                return OriginCode.Equals(DestinationCode);
+            }
+        }
         #endregion
     }
 }

@@ -5,26 +5,61 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ViewModel="using:GoLah.ViewModel"
+    xmlns:Converter="using:GoLah.Apps.Converter"
     x:Class="GoLah.Apps.View.BusServicesPage"
     mc:Ignorable="d">
     <Page.Resources>
-        <DataTemplate x:Key="BusServiceTemplate">
-            <Grid Height="100" Width="320">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding ServiceNo}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock x:Name="TbOrigin" Text="Origin" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding OriginCode}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                <TextBlock x:Name="TbDest" Text="Destination" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DestinationCode}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        <Converter:BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <Converter:InvertBooleanToVisibilityConverter x:Key="InvertBoolToVisibility"/>
 
+        <DataTemplate x:Key="BusServiceTemplate">
+            <Grid Background="Wheat" Width="296" Padding="2">
+                <Border BorderBrush="Aqua"  BorderThickness="1">
+                    <StackPanel d:LayoutOverrides="Height">
+                        <TextBlock x:Name="tbServiceNo" Text="{Binding ServiceNo}" VerticalAlignment="Center" FontWeight="Bold" d:LayoutOverrides="TopPosition, BottomPosition"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="Operator" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Operator}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40"/>
+                            <Grid x:Name="GridBidirection" Visibility="{Binding IsLoop, Converter={StaticResource InvertBoolToVisibility}}" Height="100" Grid.Column="1" d:LayoutOverrides="Width, LeftPosition, RightPosition">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock x:Name="tbDirection1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction1" d:LayoutOverrides="Height"/>
+                                <TextBlock x:Name="tbDirection2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction2" d:LayoutOverrides="Height"/>
+                                <TextBlock x:Name="tbD1Origin" Grid.Row="1" Grid.Column="0" Text="{Binding OriginCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbD1Destination" Grid.Row="2" Grid.Column="0" Text="{Binding DestinationCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbD2Origin" Grid.Row="1" Grid.Column="1" Text="{Binding DestinationCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbD2Destination" Grid.Row="2" Grid.Column="1" Text="{Binding OriginCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbBusCategory" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Category}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>
+
+                            </Grid>
+                            <Grid Grid.Column="1" Visibility="{Binding IsLoop, Converter={StaticResource BoolToVisibility}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock x:Name="tbLoop" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Loop" d:LayoutOverrides="Height"/>
+                                <TextBlock x:Name="tbOriginDest" Grid.Row="1"  Text="{Binding OriginCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbLoopDescription" Grid.Row="2" Text="{Binding LoopDescription}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbLoopBusCategory" Grid.Row="3" Text="{Binding Category}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+                </Border>
             </Grid>
         </DataTemplate>
     </Page.Resources>
