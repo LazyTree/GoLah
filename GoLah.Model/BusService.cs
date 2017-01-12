@@ -69,6 +69,7 @@ namespace GoLah.Model
         /// <summary>
         /// Location at which the bus service loops, empty if not a loop service.
         /// </summary>
+        [JsonProperty("LoopDesc")]
         public string LoopDescription { get; set; }
 
         public bool IsLoop

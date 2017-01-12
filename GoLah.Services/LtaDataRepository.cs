@@ -48,7 +48,7 @@ namespace GoLah.Services
         /// </summary>
         /// <param name="useCache">True to get cached result. False to get fresh result.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<BusStop>> GetBusStopsAsync(bool useCache)
+        public async Task<IEnumerable<BusStop>> GetBusStopsAsync(bool useCache = true)
         {
             if (useCache && _cachedBusStops.Count > 0)
             {
@@ -84,7 +84,7 @@ namespace GoLah.Services
         /// </summary>
         /// <param name="useCache">True to get cached result. False to get fresh result.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<BusService>> GetBusServicesAsync(bool useCache)
+        public async Task<IEnumerable<BusService>> GetBusServicesAsync(bool useCache = true)
         {
             if(useCache && _cachedBusServices.Count > 0)
             {
@@ -117,7 +117,7 @@ namespace GoLah.Services
         }
 
         /// <summary>
-        /// Get bus arrival info.
+        /// Get bus arrival info of the specified bus stop.
         /// </summary>
         /// <param name="busStopId"></param>
         /// <returns></returns>
