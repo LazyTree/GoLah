@@ -111,6 +111,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ArrivalBusService.cs" />
+    <Compile Include="BusRoutine.cs" />
     <Compile Include="BusService.cs" />
     <Compile Include="BusServiceCategory.cs" />
     <Compile Include="BusStatus.cs" />

@@ -8,10 +8,7 @@ using System.Threading.Tasks;
 
 namespace GoLah.Model
 {
-    /// <summary>
-    /// Bus service information.
-    /// </summary>
-    public class BusService
+    public class BusService : IComparable
     {
         #region Properties
 
@@ -20,64 +17,11 @@ namespace GoLah.Model
         /// </summary>
         public string ServiceNo { get; set; }
 
-        /// <summary>
-        /// Operator for this bus service.
-        /// </summary>
-        public string Operator { get; set; }
+        public BusRoutine[] Routines { get; set; }
 
-        /// <summary>
-        /// The direction in which the bus travels(1 or 2), loop services only have 1 direction.
-        /// </summary>
-        public byte Direction { get; set; }
-
-        /// <summary>
-        /// Category of the SBS bus service.
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public BusServiceCategory Category { get; set; }
-
-        /// <summary>
-        /// Bus stop code for first bus stop.
-        /// </summary>
-        public string OriginCode { get; set; }
-
-        /// <summary>
-        /// Bus stop code for last bus stop(similar as first stop for loop services).
-        /// </summary>
-        public string DestinationCode { get; set; }
-
-        /// <summary>
-        /// Frequence of dispatch for AM Peak 0630H - 0830H (range in minutes).
-        /// </summary>
-        public uint MorningPeakFrequency { get; set; }
-
-        /// <summary>
-        /// Frequency of dispatch for AM Off-Peak 0831H - 1659H (range in minutes).
-        /// </summary>
-        public uint MorningOffpeakFrequency { get; set; }
-
-        /// <summary>
-        /// Frequency of dispatch for PM Peak 1700H - 1900H (range in minutes).
-        /// </summary>
-        public uint EveningPeakFrequency { get; set; }
-
-        /// <summary>
-        /// Frequency of dispatch for PM Off-Peak after 1900H (range in minutes).
-        /// </summary>
-        public uint EveningOffPeakFrequency { get; set; }
-
-        /// <summary>
-        /// Location at which the bus service loops, empty if not a loop service.
-        /// </summary>
-        [JsonProperty("LoopDesc")]
-        public string LoopDescription { get; set; }
-
-        public bool IsLoop
+        public int CompareTo(object obj)
         {
-            get
-            {
-                return OriginCode.Equals(DestinationCode);
-            }
+            return ServiceNo.CompareTo((obj as BusService).ServiceNo);
         }
         #endregion
     }

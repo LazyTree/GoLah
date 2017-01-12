@@ -13,7 +13,7 @@ namespace GoLah.ViewModel
     public class BusServicesPageViewModel : ViewModelBase
     {
         private ObservableCollection<BusService> _allBusServices = new ObservableCollection<BusService>();
-        private BusService _selectedBusService;
+        private BusRoutine _selectedBusService;
 
         public BusServicesPageViewModel()
         {
@@ -24,27 +24,50 @@ namespace GoLah.ViewModel
                     new BusService
                     {
                         ServiceNo = "112e",
-                        Category = BusServiceCategory.FlatFee,
-                        Operator ="SBS",
-                        OriginCode = "123",
-                        DestinationCode = "456"
+                        Routines = new BusRoutine[]
+                        {
+                            new BusRoutine
+                            {
+                                ServiceNo = "112e",
+                                Category = BusServiceCategory.FlatFee,
+                                Operator ="SBS",
+                                OriginCode = "123",
+                                DestinationCode = "456"
+                            }
+                        }
                     },
+
                     new BusService
                     {
                         ServiceNo = "857",
-                        Category = BusServiceCategory.Express,
-                        Operator ="SMART",
-                        OriginCode = "123",
-                        DestinationCode = "456"
+                        Routines = new BusRoutine[]
+                        {
+                            new BusRoutine
+                            {
+                                ServiceNo = "857",
+                                Category = BusServiceCategory.Express,
+                                Operator ="SMART",
+                                OriginCode = "123",
+                                DestinationCode = "456"
+                            }
+                        }
                     },
+
                     new BusService
                     {
                         ServiceNo = "858",
-                        Category = BusServiceCategory.Feeder,
-                        Operator ="SMRT",
-                        OriginCode = "123",
-                        DestinationCode = "456"
-                    },
+                        Routines = new BusRoutine[]
+                        {
+                            new BusRoutine
+                            {
+                                ServiceNo = "858",
+                                Category = BusServiceCategory.Feeder,
+                                Operator ="SMRT",
+                                OriginCode = "123",
+                                DestinationCode = "456"
+                            }
+                        }
+                    }
                 };
             }
             else
@@ -65,7 +88,7 @@ namespace GoLah.ViewModel
             }
         }
 
-        public BusService SelectedBusService
+        public BusRoutine SelectedBusService
         {
             get { return _selectedBusService; }
             set
