@@ -5,8 +5,11 @@
     xmlns:local="using:GoLah.Apps.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ViewModel="using:GoLah.ViewModel"
     mc:Ignorable="d">
-
+    <Page.DataContext>
+        <ViewModel:BusStopsPageViewModel/>
+    </Page.DataContext>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Button x:Name="BtnBusStopsPage" Content="Bus Stops Page" VerticalAlignment="Center" HorizontalAlignment="Center" Width="200" Height="100" FontSize="20" Background="#3337BF19"/>
     </Grid>

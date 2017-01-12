@@ -17,7 +17,7 @@ namespace GoLah.Model
         /// <summary>
         /// The unique 5-digit identifier for this physical bus stop.
         /// </summary>
-        public string Code { get; set; }
+        public string BusStopCode { get; set; }
 
         /// <summary>
         /// The road on which this bus stop is located.

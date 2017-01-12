@@ -11,6 +11,7 @@
     <Page.Resources>
         <Converter:BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
         <Converter:InvertBooleanToVisibilityConverter x:Key="InvertBoolToVisibility"/>
+        <Converter:BusStopConverter x:Key="BusStopConverter"/>
 
         <DataTemplate x:Key="BusServiceTemplate">
             <Grid Background="Wheat" Width="296" Padding="2">
@@ -37,10 +38,10 @@
 
                                 <TextBlock x:Name="tbDirection1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction1" d:LayoutOverrides="Height"/>
                                 <TextBlock x:Name="tbDirection2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction2" d:LayoutOverrides="Height"/>
-                                <TextBlock x:Name="tbD1Origin" Grid.Row="1" Grid.Column="0" Text="{Binding Routines[0].OriginCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD1Destination" Grid.Row="2" Grid.Column="0" Text="{Binding Routines[0].DestinationCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD2Origin" Grid.Row="1" Grid.Column="1" Text="{Binding Routines[0].DestinationCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD2Destination" Grid.Row="2" Grid.Column="1" Text="{Binding Routines[0].OriginCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbD1Origin" Grid.Row="1" Grid.Column="0" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbD1Destination" Grid.Row="2" Grid.Column="0" Text="{Binding Routines[0].DestinationCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbD2Origin" Grid.Row="1" Grid.Column="1" Text="{Binding Routines[0].DestinationCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbD2Destination" Grid.Row="2" Grid.Column="1" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 <TextBlock x:Name="tbBusCategory" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Routines[0].Category}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>
 
                             </Grid>
@@ -53,7 +54,7 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock x:Name="tbLoop" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Loop" d:LayoutOverrides="Height"/>
-                                <TextBlock x:Name="tbOriginDest" Grid.Row="1"  Text="{Binding Routines[0].OriginCode}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="tbOriginDest" Grid.Row="1"  Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 <TextBlock x:Name="tbLoopDescription" Grid.Row="2" Text="{Binding Routines[0].LoopDescription}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                 <TextBlock x:Name="tbLoopBusCategory" Grid.Row="3" Text="{Binding Routines[0].Category}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>
                             </Grid>

@@ -11,5 +11,15 @@ namespace GoLah.ViewModel
 {
     public class BusStopsPageViewModel : ViewModelBase
     {
+        public BusStopsPageViewModel()
+        {
+            GetBusStopsAsync();
+        }
+
+        private async void GetBusStopsAsync()
+        {
+            var repo = new LtaDataRepository();
+            await repo.GetBusStopsAsync();
+        }
     }
 }

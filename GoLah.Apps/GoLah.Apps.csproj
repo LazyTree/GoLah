@@ -100,6 +100,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converter\BusStopConverter.cs" />
     <Compile Include="Converter\InvertBooleanToVisibilityConverter.cs" />
     <Compile Include="View\BusServicesPage.xaml.cs">
       <DependentUpon>BusServicesPage.xaml</DependentUpon>
@@ -162,6 +163,10 @@
     <ProjectReference Include="..\GoLah.Model\GoLah.Model.csproj">
       <Project>{f25e4011-3930-4955-9078-d32148026505}</Project>
       <Name>GoLah.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Golah.Services\GoLah.Services.csproj">
+      <Project>{8FDB6BBE-3987-4655-A784-01FDB59BB156}</Project>
+      <Name>GoLah.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\Golah.ViewModel\GoLah.ViewModel.csproj">
       <Project>{6879507d-b8c4-46dc-8ffe-f11511153a42}</Project>

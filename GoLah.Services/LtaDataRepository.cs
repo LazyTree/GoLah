@@ -14,6 +14,8 @@ namespace GoLah.Services
 {
     public class LtaDataRepository
     {
+        #region Fields
+
         private const string URI = @"http://datamall2.mytransport.sg/ltaodataservice/";
         private const string key = @"4DZEmxtLQOmpRFW8vgqmTA==";
         private const string accept = "application/json";
@@ -28,21 +30,43 @@ namespace GoLah.Services
         private static List<BusService> _cachedBusServices = new List<BusService>();
         private static List<BusStop> _cachedBusStops = new List<BusStop>();
 
-        private async Task<string> GetResponseStringAsync(string url)
-        {
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-            var headers = new WebHeaderCollection();
-            headers["AccountKey"] = key;
-            headers["Accept"] = accept;
-            httpWebRequest.Headers = headers;
-            httpWebRequest.Method = "GET";
+        #endregion
 
-            var response = await httpWebRequest.GetResponseAsync();
-            using (var streamReader = new StreamReader(response.GetResponseStream()))
+        #region Properties
+
+        /// <summary>
+        /// Cached bus stops.
+        /// </summary>
+        public List<BusStop> CachedBusStops
+        {
+            get
             {
-                return streamReader.ReadToEnd();
+                if(!_cachedBusStops.Any())
+                {
+                    _cachedBusStops = GetBusStopsAsync().Result.ToList();
+                }
+                return _cachedBusStops;
             }
         }
+
+        /// <summary>
+        /// Cached bus services.
+        /// </summary>
+        public List<BusService> CachedBusServices
+        {
+            get
+            {
+                if (!_cachedBusServices.Any())
+                {
+                    _cachedBusServices = GetBusServicesAsync().Result.ToList();
+                }
+                return _cachedBusServices;
+            }
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Get all bus stops.
@@ -102,22 +126,9 @@ namespace GoLah.Services
                 page += PAGE_SIZE;
             }
             while (result.Count() == PAGE_SIZE);
-            _cachedBusServices = MassageBusRoutineToBusService(_cachedBusRoutines).ToList();
+            _cachedBusServices = MergeBusRoutineToBusService(_cachedBusRoutines).ToList();
             _cachedBusServices.Sort();
             return _cachedBusServices;
-        }
-
-        private IEnumerable<BusService> MassageBusRoutineToBusService(List<BusRoutine> _cachedBusRoutines)
-        {
-            var groups = _cachedBusRoutines.GroupBy(x => x.ServiceNo);
-            foreach (var group in groups)
-            {
-                yield return new BusService()
-                {
-                    ServiceNo = group.Key,
-                    Routines = group.Select(x => x).ToArray()
-                };
-            }
         }
 
         /// <summary>
@@ -142,5 +153,51 @@ namespace GoLah.Services
             var jsonString = await GetResponseStringAsync(string.Concat(URI, string.Format(BUS_ARRIVAL, busStopId)));
             return JsonConvert.DeserializeObject<BusArrivalOData>(jsonString)?.Services;
         }
+
+        public BusStop GetBusStopByCode(string code)
+        {
+            return CachedBusStops.SingleOrDefault(x => x.BusStopCode.Equals(code));
+        }
+
+        /// <summary>
+        /// Get the Json response from LTA datamall REST API.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private async Task<string> GetResponseStringAsync(string url)
+        {
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            var headers = new WebHeaderCollection();
+            headers["AccountKey"] = key;
+            headers["Accept"] = accept;
+            httpWebRequest.Headers = headers;
+            httpWebRequest.Method = "GET";
+
+            var response = await httpWebRequest.GetResponseAsync();
+            using (var streamReader = new StreamReader(response.GetResponseStream()))
+            {
+                return streamReader.ReadToEnd();
+            }
+        }
+
+        /// <summary>
+        /// Massage the bus routines to bus services.
+        /// </summary>
+        /// <param name="_cachedBusRoutines"></param>
+        /// <returns></returns>
+        private IEnumerable<BusService> MergeBusRoutineToBusService(List<BusRoutine> _cachedBusRoutines)
+        {
+            var groups = _cachedBusRoutines.GroupBy(x => x.ServiceNo);
+            foreach (var group in groups)
+            {
+                yield return new BusService()
+                {
+                    ServiceNo = group.Key,
+                    Routines = group.Select(x => x).ToArray()
+                };
+            }
+        }
+
+        #endregion
     }
 }
