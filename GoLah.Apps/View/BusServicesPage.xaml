@@ -74,6 +74,13 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="BusServices" Grid.Column="0" ItemsSource="{Binding AllBusServices, Mode=TwoWay}" ItemTemplate="{StaticResource BusServiceTemplate}"/>
+        <StackPanel Grid.Column="0">
+            <TextBlock Margin="20" Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource InvertBoolToVisibility} }">Loading...</TextBlock>
+            <ListView x:Name="BusServices" 
+                  ItemsSource="{Binding AllBusServices, Mode=TwoWay}"
+                  ItemTemplate="{StaticResource BusServiceTemplate}"
+                  Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource BoolToVisibility}}"/>
+        </StackPanel>
+        
     </Grid>
 </Page>

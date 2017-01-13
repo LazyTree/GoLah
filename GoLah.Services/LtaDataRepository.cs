@@ -43,7 +43,7 @@ namespace GoLah.Services
             {
                 if(!_cachedBusStops.Any())
                 {
-                    _cachedBusStops = GetBusStopsAsync().Result.ToList();
+                    _cachedBusStops= Task.Run(() => GetBusStopsAsync()).Result.ToList();
                 }
                 return _cachedBusStops;
             }
@@ -67,6 +67,15 @@ namespace GoLah.Services
         #endregion
 
         #region Methods
+
+        public async Task GetBusStopCacheAsync()
+        {
+            if (!_cachedBusStops.Any())
+            {
+                var busStops = await GetBusStopsAsync();
+                _cachedBusStops = busStops.ToList();
+            }
+        }
 
         /// <summary>
         /// Get all bus stops.

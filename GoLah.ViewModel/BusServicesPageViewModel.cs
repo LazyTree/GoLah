@@ -14,6 +14,7 @@ namespace GoLah.ViewModel
     {
         private ObservableCollection<BusService> _allBusServices = new ObservableCollection<BusService>();
         private BusRoutine _selectedBusService;
+        private bool _isBusServiceInfoReady = false;
 
         public BusServicesPageViewModel()
         {
@@ -76,6 +77,18 @@ namespace GoLah.ViewModel
             }
         }
 
+        public bool IsBusServiceInfoReady
+        {
+            get
+            {
+                return _isBusServiceInfoReady;
+            }
+            set
+            {
+                Set(ref _isBusServiceInfoReady, value);
+            }
+        }
+
         public ObservableCollection<BusService> AllBusServices
         {
             get
@@ -99,9 +112,16 @@ namespace GoLah.ViewModel
 
         private async void LoadData()
         {
+            IsBusServiceInfoReady = false;
+
             var repository = new LtaDataRepository();
+
+            await repository.GetBusStopCacheAsync();
+
             AllBusServices = new ObservableCollection<BusService>(
-                await repository.GetBusServicesAsync());   
+                await repository.GetBusServicesAsync());
+
+            IsBusServiceInfoReady = true;
         }
     }
 }
