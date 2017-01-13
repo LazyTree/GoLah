@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,8 @@ namespace GoLah.Model
         /// <summary>
         /// The unique 5-digit identifier for this physical bus stop.
         /// </summary>
-        public string BusStopCode { get; set; }
+        [JsonProperty("BusStopCode")]
+        public string Code { get; set; }
 
         /// <summary>
         /// The road on which this bus stop is located.

@@ -154,9 +154,14 @@ namespace GoLah.Services
             return JsonConvert.DeserializeObject<BusArrivalOData>(jsonString)?.Services;
         }
 
+        /// <summary>
+        /// Get bus stop description by bus stop code for UI binding converter.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public BusStop GetBusStopByCode(string code)
         {
-            return CachedBusStops.SingleOrDefault(x => x.BusStopCode.Equals(code));
+            return CachedBusStops.SingleOrDefault(x => x.Code.Equals(code));
         }
 
         /// <summary>
