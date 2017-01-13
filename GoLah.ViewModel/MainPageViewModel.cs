@@ -22,9 +22,17 @@ namespace GoLah.ViewModel
 
         private ArrivalBusService _selectedBusService;
 
+        private LoadingStates _loadingState = LoadingStates.Loading;
+
         #endregion
 
         #region Properties
+
+        public LoadingStates LoadingState
+        {
+            get { return _loadingState; }
+            set { Set(ref _loadingState, value); }
+        }
 
         /// <summary>
         /// Bus stop code to check for bus arrival.
@@ -72,7 +80,32 @@ namespace GoLah.ViewModel
 
         #endregion
 
+        #region Constructor
+
+        public MainPageViewModel()
+        {
+            LoadData();
+        }
+
+
+        #endregion
+
         #region Methods
+
+        private async void LoadData()
+        {
+            try
+            {
+                var repo = new LtaDataRepository();
+                await repo.GetBusStopsAsync();
+                await repo.GetBusServicesAsync();
+                LoadingState = LoadingStates.Loaded;
+            }
+            catch
+            {
+                LoadingState = LoadingStates.Error;
+            }
+        }
 
         /// <summary>
         /// Update arrival bus services based on the bus stop code.
@@ -94,5 +127,12 @@ namespace GoLah.ViewModel
         }
 
         #endregion
+
+        public enum LoadingStates
+        {
+            Loading,
+            Loaded,
+            Error
+        }
     }
 }

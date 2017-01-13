@@ -110,16 +110,13 @@ namespace GoLah.ViewModel
             }
         }
 
-        private async void LoadData()
+        private void LoadData()
         {
             IsBusServiceInfoReady = false;
 
             var repository = new LtaDataRepository();
 
-            await repository.GetBusStopCacheAsync();
-
-            AllBusServices = new ObservableCollection<BusService>(
-                await repository.GetBusServicesAsync());
+            AllBusServices = new ObservableCollection<BusService>(repository.CachedBusServices);
 
             IsBusServiceInfoReady = true;
         }

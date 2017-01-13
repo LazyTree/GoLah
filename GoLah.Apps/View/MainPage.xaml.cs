@@ -24,9 +24,18 @@ namespace GoLah.Apps
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private MainPageViewModel Logic => DataContext as MainPageViewModel;
+
         public MainPage()
         {
             this.InitializeComponent();
+            Logic.PropertyChanged += Logic_PropertyChanged;
+        }
+
+        private void Logic_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainPageViewModel.LoadingState))
+                VisualStateManager.GoToState(this, Logic.LoadingState.ToString(), true);
         }
 
         private void BtnBusServices_Click(object sender, RoutedEventArgs e)

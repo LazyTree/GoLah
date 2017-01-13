@@ -14,7 +14,7 @@
         <Converter:BusStopConverter x:Key="BusStopConverter"/>
 
         <DataTemplate x:Key="BusServiceTemplate">
-            <Grid Background="Wheat" Width="296" Padding="2">
+            <Grid Background="Wheat" HorizontalAlignment="Stretch" Padding="2">
                 <Border BorderBrush="Aqua"  BorderThickness="1">
                     <StackPanel d:LayoutOverrides="Height">
                         <TextBlock x:Name="tbServiceNo" Text="{Binding ServiceNo}" VerticalAlignment="Center" FontWeight="Bold" d:LayoutOverrides="TopPosition, BottomPosition"/>
@@ -72,15 +72,20 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <TextBlock Margin="20" Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource InvertBoolToVisibility} }">Loading...</TextBlock>
-            <ListView x:Name="BusServices" 
+        <SplitView x:Name="splitView" Grid.ColumnSpan="2" DisplayMode="Inline" IsPaneOpen="True">
+            <SplitView.Pane>
+                <ScrollViewer Grid.Column="0">
+                    <StackPanel>
+                        <TextBlock Margin="20" HorizontalAlignment="Center" Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource InvertBoolToVisibility}}">Loading...</TextBlock>
+                        <ItemsControl Grid.Column="0" x:Name="BusServices"  
                   ItemsSource="{Binding AllBusServices, Mode=TwoWay}"
                   ItemTemplate="{StaticResource BusServiceTemplate}"
                   Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource BoolToVisibility}}"/>
-        </StackPanel>
-        
+                    </StackPanel>
+                </ScrollViewer>
+            </SplitView.Pane>
+        </SplitView>
     </Grid>
 </Page>
