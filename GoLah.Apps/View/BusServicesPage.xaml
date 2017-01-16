@@ -14,53 +14,55 @@
         <Converter:BusStopConverter x:Key="BusStopConverter"/>
 
         <DataTemplate x:Key="BusServiceTemplate">
-            <Grid Background="Wheat" HorizontalAlignment="Stretch" Padding="2">
-                <Border BorderBrush="Aqua"  BorderThickness="1">
-                    <StackPanel d:LayoutOverrides="Height">
-                        <TextBlock x:Name="tbServiceNo" Text="{Binding ServiceNo}" VerticalAlignment="Center" FontWeight="Bold" d:LayoutOverrides="TopPosition, BottomPosition"/>
-                        <Grid>
+
+            <Grid Width="{Binding Path=Width, RelativeSource={RelativeSource Mode=TemplatedParent} }" Margin="0,2,0,0">
+                <Line X1="0" X2="320" Y1="3" Y2="3" Stroke="Black" StrokeThickness="1"/>
+                <StackPanel Margin="0,2,0,0">
+                    <TextBlock x:Name="tbServiceNo" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding ServiceNo}"  FontWeight="Bold" FontSize="15" d:LayoutOverrides="TopPosition, BottomPosition"/>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="Operator" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Routines[0].Operator}" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40"/>
+                        <Grid x:Name="BidirectionalBus" Visibility="{Binding Routines[0].IsLoop, Converter={StaticResource InvertBoolToVisibility}}" Grid.Column="1" d:LayoutOverrides="Width, LeftPosition, RightPosition">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="Operator" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Routines[0].Operator}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40"/>
-                            <Grid x:Name="GridBidirection" Visibility="{Binding Routines[0].IsLoop, Converter={StaticResource InvertBoolToVisibility}}" Height="100" Grid.Column="1" d:LayoutOverrides="Width, LeftPosition, RightPosition">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                                <TextBlock x:Name="tbDirection1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction1" d:LayoutOverrides="Height"/>
-                                <TextBlock x:Name="tbDirection2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction2" d:LayoutOverrides="Height"/>
-                                <TextBlock x:Name="tbD1Origin" Grid.Row="1" Grid.Column="0" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD1Destination" Grid.Row="2" Grid.Column="0" Text="{Binding Routines[0].DestinationCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD2Origin" Grid.Row="1" Grid.Column="1" Text="{Binding Routines[0].DestinationCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD2Destination" Grid.Row="2" Grid.Column="1" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbBusCategory" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Routines[0].Category}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>
+                            <TextBlock x:Name="tbDirection1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction1" FontSize="12" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbDirection2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction2" FontSize="12" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbD1Origin" Grid.Row="1" Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbD1Destination" Grid.Row="2" Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding Routines[0].DestinationCode, Converter={StaticResource BusStopConverter}}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbD2Origin" Grid.Row="1" Grid.Column="1" TextWrapping="WrapWholeWords" Text="{Binding Routines[0].DestinationCode, Converter={StaticResource BusStopConverter}}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbD2Destination" Grid.Row="2" Grid.Column="1" TextWrapping="WrapWholeWords" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!--<TextBlock x:Name="tbBusCategory" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Routines[0].Category}" HorizontalAlignment="Center" FontSize="12" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>-->
 
-                            </Grid>
-                            <Grid Grid.Column="1" Visibility="{Binding Routines[0].IsLoop, Converter={StaticResource BoolToVisibility}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-
-                                <TextBlock x:Name="tbLoop" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Loop" d:LayoutOverrides="Height"/>
-                                <TextBlock x:Name="tbOriginDest" Grid.Row="1"  Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbLoopDescription" Grid.Row="2" Text="{Binding Routines[0].LoopDescription}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbLoopBusCategory" Grid.Row="3" Text="{Binding Routines[0].Category}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>
-                            </Grid>
                         </Grid>
-                    </StackPanel>
-                </Border>
+                        <Grid x:Name="LoopBus" Grid.Column="1" Visibility="{Binding Routines[0].IsLoop, Converter={StaticResource BoolToVisibility}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Name="tbLoop" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Loop Service Loop at:" FontSize="12" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbLoopDescription" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="WrapWholeWords" Text="{Binding Routines[0].LoopDescription}" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbOriginDestTag" Grid.Row="1"  Text="Start/End at" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbOriginDest" Grid.Row="1" TextWrapping="WrapWholeWords" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+
+                            <!--<TextBlock x:Name="tbLoopBusCategory" Grid.Row="3" Text="{Binding Routines[0].Category}" HorizontalAlignment="Center" FontSize="12" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>-->
+                        </Grid>
+                    </Grid>
+                </StackPanel>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -70,22 +72,40 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-        <SplitView x:Name="splitView" Grid.ColumnSpan="2" DisplayMode="Inline" IsPaneOpen="True">
+
+        <SplitView x:Name="splitView" DisplayMode="Inline" IsPaneOpen="True" OpenPaneLength="320">
             <SplitView.Pane>
-                <ScrollViewer Grid.Column="0">
-                    <StackPanel>
-                        <TextBlock Margin="20" HorizontalAlignment="Center" Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource InvertBoolToVisibility}}">Loading...</TextBlock>
-                        <ItemsControl Grid.Column="0" x:Name="BusServices"  
-                  ItemsSource="{Binding AllBusServices, Mode=TwoWay}"
-                  ItemTemplate="{StaticResource BusServiceTemplate}"
-                  Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource BoolToVisibility}}"/>
-                    </StackPanel>
-                </ScrollViewer>
+                <Grid>
+                    <TextBlock HorizontalAlignment="Center" Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource InvertBoolToVisibility}}">Loading...</TextBlock>
+                    <ListView 
+                        x:Name="lvServices"
+                        ItemsSource="{Binding AllBusServices, Mode=TwoWay}" 
+                        ItemTemplate="{StaticResource BusServiceTemplate}" 
+                        SelectedItem="{Binding SelectedBusService}" 
+                        Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource BoolToVisibility}}" 
+                        HorizontalContentAlignment="Left"
+                        HorizontalAlignment="Stretch"/>
+                </Grid>
             </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Background="Aquamarine" Grid.Row="0">
+                        <TextBlock Text="This is placeholder for bus operator logo" TextWrapping="WrapWholeWords" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50"/>
+                    </Border>
+                    <Border Background="Coral"  Grid.Row="1">
+                        <TextBlock Text="This is placeholder for map control" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50"/>
+                    </Border>
+                    <Border Background="CadetBlue"  Grid.Row="2">
+                        <TextBlock Text="This is placeholder for bus details" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50"/>
+                    </Border>
+                </Grid>
+                <!--<Image x:Name="Operator" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill"/>-->
+            </SplitView.Content>
         </SplitView>
     </Grid>
 </Page>
