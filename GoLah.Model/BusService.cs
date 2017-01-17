@@ -12,12 +12,21 @@ namespace GoLah.Model
     {
         #region Properties
 
-        /// <summary>
-        /// The bus service number.
-        /// </summary>
         public string ServiceNo { get; set; }
 
-        public BusRoutine[] Routines { get; set; }
+        public string Operator { get; set; }
+
+        public BusDirection[] Directions { get; set; }
+
+        public bool IsLoop
+        {
+            get
+            {
+                return Directions.Length == 1;
+            }
+        }
+
+        public string LoopDescription { get; set; }
 
         public int CompareTo(object obj)
         {

@@ -11,7 +11,7 @@ namespace GoLah.Model
     /// <summary>
     /// Bus service information.
     /// </summary>
-    public class BusRoutine
+    public class BusRoute
     {
         #region Properties
 
@@ -72,13 +72,11 @@ namespace GoLah.Model
         [JsonProperty("LoopDesc")]
         public string LoopDescription { get; set; }
 
-        public bool IsLoop
-        {
-            get
-            {
-                return OriginCode.Equals(DestinationCode);
-            }
-        }
+        /// <summary>
+        /// Codes of bus stops along the route.
+        /// </summary>
+        public List<string> BusStopCodes { get; set; }
+
         #endregion
     }
 }

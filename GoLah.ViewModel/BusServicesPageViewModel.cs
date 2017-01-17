@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using GoLah.Model;
 using GoLah.Services;
 
-
 namespace GoLah.ViewModel
 {
     public class BusServicesPageViewModel : ViewModelBase
     {
         private ObservableCollection<BusService> _allBusServices = new ObservableCollection<BusService>();
-        private BusRoutine _selectedBusService;
+        private BusService _selectedBusService;
         private bool _isBusServiceInfoReady = false;
 
         public BusServicesPageViewModel()
@@ -24,50 +23,17 @@ namespace GoLah.ViewModel
                 {
                     new BusService
                     {
-                        ServiceNo = "112e",
-                        Routines = new BusRoutine[]
-                        {
-                            new BusRoutine
-                            {
-                                ServiceNo = "112e",
-                                Category = BusServiceCategory.FlatFee,
-                                Operator ="SBS",
-                                OriginCode = "123",
-                                DestinationCode = "456"
-                            }
-                        }
+                        ServiceNo = "112e"
                     },
 
                     new BusService
                     {
-                        ServiceNo = "857",
-                        Routines = new BusRoutine[]
-                        {
-                            new BusRoutine
-                            {
-                                ServiceNo = "857",
-                                Category = BusServiceCategory.Express,
-                                Operator ="SMART",
-                                OriginCode = "123",
-                                DestinationCode = "456"
-                            }
-                        }
+                        ServiceNo = "857"
                     },
 
                     new BusService
                     {
-                        ServiceNo = "858",
-                        Routines = new BusRoutine[]
-                        {
-                            new BusRoutine
-                            {
-                                ServiceNo = "858",
-                                Category = BusServiceCategory.Feeder,
-                                Operator ="SMRT",
-                                OriginCode = "123",
-                                DestinationCode = "456"
-                            }
-                        }
+                        ServiceNo = "858"
                     }
                 };
             }
@@ -101,7 +67,7 @@ namespace GoLah.ViewModel
             }
         }
 
-        public BusRoutine SelectedBusService
+        public BusService SelectedBusService
         {
             get { return _selectedBusService; }
             set
@@ -116,9 +82,66 @@ namespace GoLah.ViewModel
 
             var repository = new LtaDataRepository();
 
-            AllBusServices = new ObservableCollection<BusService>(repository.CachedBusServices);
+            AllBusServices = new ObservableCollection<BusService>(MergeBusRoutesToBusService(repository.CachedRoutes));
 
             IsBusServiceInfoReady = true;
+
+            SelectedBusService = AllBusServices.First();
         }
+
+
+        /// <summary>
+        /// Massage the bus routes to bus service.
+        /// </summary>
+        /// <param name="_cachedBusRoutes"></param>
+        /// <returns></returns>
+        private IEnumerable<BusService> MergeBusRoutesToBusService(List<BusRoute> busRoutes)
+        {
+            var repository = new LtaDataRepository();
+
+            var allStops = repository.CachedBusStops;
+
+            var groups = busRoutes.GroupBy(x => x.ServiceNo);
+
+            Random rnd = new Random();
+
+            List<BusService> services = new List<BusService>();
+            foreach (var group in groups)
+            {
+                services.Add( new BusService
+                {
+                    ServiceNo = group.Key,
+                    Operator = group.First().Operator,
+                    LoopDescription = group.First().LoopDescription,
+                    Directions = group.Select(r => new BusDirection
+                    {
+                        Direction = r.Direction,
+                        Origin = allStops.Where(s => s.Code == r.OriginCode).FirstOrDefault()?.Description,
+                        Destination = allStops.Where(s => s.Code == r.DestinationCode).FirstOrDefault()?.Description,
+                        //Stops = r.BusStopCodes == null? new List<BusStop>() : allStops.Where(s => r.BusStopCodes.Contains(s.Code)).ToList(),
+                        Stops = new List<BusStop>
+                        {
+                            allStops[rnd.Next(0, allStops.Count() - 1)],
+                            allStops[rnd.Next(0, allStops.Count() - 1)],
+                            allStops[rnd.Next(0, allStops.Count() - 1)],
+                            allStops[rnd.Next(0, allStops.Count() - 1)],
+                            allStops[rnd.Next(0, allStops.Count() - 1)]
+                        },
+                        Timing = new BusTiming
+                        {
+                            EveningOffPeakFrequency = r.EveningOffPeakFrequency,
+                            EveningPeakFrequency = r.EveningPeakFrequency,
+                            MorningOffpeakFrequency = r.MorningOffpeakFrequency,
+                            MorningPeakFrequency = r.MorningPeakFrequency
+                        }
+
+                    }).ToArray()
+                });
+            }
+
+            services.Sort();
+            return services;
+        }
+
     }
 }

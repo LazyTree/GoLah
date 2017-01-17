@@ -21,7 +21,7 @@ namespace GoLah.Services.Tests
         public async Task GetBusServicesAsync()
         {
             var repository = new LtaDataRepository();
-            var result = new List<BusService>(await repository.GetBusServicesAsync(false));
+            var result = new List<BusRoute>(await repository.GetBusRoutesAsync(false));
             Assert.IsTrue(result.Count > 200);
         }
 

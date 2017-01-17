@@ -111,11 +111,13 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ArrivalBusService.cs" />
-    <Compile Include="BusRoutine.cs" />
+    <Compile Include="BusDirection.cs" />
+    <Compile Include="BusRoute.cs" />
     <Compile Include="BusService.cs" />
     <Compile Include="BusServiceCategory.cs" />
     <Compile Include="BusStatus.cs" />
     <Compile Include="BusStop.cs" />
+    <Compile Include="BusTiming.cs" />
     <Compile Include="NextBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GoLah.Common.rd.xml" />
