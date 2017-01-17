@@ -64,17 +64,34 @@ namespace GoLah.Apps.View
             UpdateMap();
         }
 
-        private void UpdateMap()
+        private async void UpdateMap()
         {
+            Random rnd = new Random();
+
             myMap.MapElements.Clear();
             myMap.ZoomLevel = 1;
 
-            Random rnd = new Random();
-            myMap.Center = new Geopoint(new BasicGeoposition()
+            var accessStatus = await Geolocator.RequestAccessAsync();
+
+            if (accessStatus == GeolocationAccessStatus.Allowed)
             {
-                Latitude = rnd.Next(0, 89),
-                Longitude = rnd.Next(0, 179)
-            });
+                Geolocator geolocator = new Geolocator { DesiredAccuracyInMeters = 10 };
+                Geoposition pos = await geolocator.GetGeopositionAsync();
+
+                myMap.Center = new Geopoint(new BasicGeoposition()
+                {
+                    Latitude = pos.Coordinate.Latitude,
+                    Longitude = pos.Coordinate.Longitude
+                });
+            }
+            else
+            {
+                myMap.Center = new Geopoint(new BasicGeoposition()
+                {
+                    Latitude = rnd.Next(0, 89),
+                    Longitude = rnd.Next(0, 179)
+                });
+            }
 
             for (int i = 0; i < 5; i++)
             {
