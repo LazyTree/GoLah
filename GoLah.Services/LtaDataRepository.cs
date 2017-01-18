@@ -26,7 +26,8 @@ namespace GoLah.Services
         private const string PAGING_SKIP = @"?$skip={0}";
         private const int PAGE_SIZE = 50;
 
-        private static List<BusRoute> _cachedBusRoutes = new List<BusRoute>();
+        private List<BusRoutine> _cachedBusRoutines = new List<BusRoutine>();
+        private static List<BusService> _cachedBusServices = new List<BusService>();
         private static List<BusStop> _cachedBusStops = new List<BusStop>();
 
         #endregion
@@ -42,7 +43,7 @@ namespace GoLah.Services
             {
                 if(!_cachedBusStops.Any())
                 {
-                    _cachedBusStops = Task.Run(() => GetBusStopsAsync()).Result.ToList();
+                    _cachedBusStops= Task.Run(() => GetBusStopsAsync()).Result.ToList();
                 }
                 return _cachedBusStops;
             }
@@ -51,22 +52,30 @@ namespace GoLah.Services
         /// <summary>
         /// Cached bus services.
         /// </summary>
-        public List<BusRoute> CachedRoutes
+        public List<BusService> CachedBusServices
         {
             get
             {
-                if (!_cachedBusRoutes.Any())
+                if (!_cachedBusServices.Any())
                 {
-                    _cachedBusRoutes = Task.Run(() => GetBusRoutesAsync()).Result.ToList();
+                    _cachedBusServices = GetBusServicesAsync().Result.ToList();
                 }
-
-                return _cachedBusRoutes;
+                return _cachedBusServices;
             }
         }
 
         #endregion
 
         #region Methods
+
+        public async Task GetBusStopCacheAsync()
+        {
+            if (!_cachedBusStops.Any())
+            {
+                var busStops = await GetBusStopsAsync();
+                _cachedBusStops = busStops.ToList();
+            }
+        }
 
         /// <summary>
         /// Get all bus stops.
@@ -82,7 +91,7 @@ namespace GoLah.Services
 
             int page = 0;
             IEnumerable<BusStop> result;
-
+            _cachedBusServices.Clear();
             do
             {
                 result = await GetBusStopsByPageAsync(page);
@@ -105,41 +114,42 @@ namespace GoLah.Services
         }
 
         /// <summary>
-        /// Get the all bus routes.
+        /// Get the all bus services.
         /// </summary>
         /// <param name="useCache">True to get cached result. False to get fresh result.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<BusRoute>> GetBusRoutesAsync(bool useCache = true)
+        public async Task<IEnumerable<BusService>> GetBusServicesAsync(bool useCache = true)
         {
-            if(useCache && _cachedBusRoutes.Any())
+            if(useCache && _cachedBusServices.Any())
             {
-                return _cachedBusRoutes;
+                return _cachedBusServices;
             }
 
             int page = 0;
-            IEnumerable<BusRoute> result;
-            _cachedBusRoutes.Clear();
+            IEnumerable<BusRoutine> result;
+            _cachedBusServices.Clear();
             do
             {
-                result = await GetBusRoutesByPageAsync(page);
-                _cachedBusRoutes.AddRange(result.ToList());
+                result = await GetBusRoutinesByPageAsync(page);
+                _cachedBusRoutines.AddRange(result.ToList());
                 page += PAGE_SIZE;
             }
             while (result.Count() == PAGE_SIZE);
-
-            return _cachedBusRoutes;
+            _cachedBusServices = MergeBusRoutineToBusService(_cachedBusRoutines).ToList();
+            _cachedBusServices.Sort();
+            return _cachedBusServices;
         }
 
         /// <summary>
         /// Get the bus service by page (50 records per page)
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<BusRoute>> GetBusRoutesByPageAsync(int page)
+        public async Task<IEnumerable<BusRoutine>> GetBusRoutinesByPageAsync(int page)
         {
             var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_SERVICES, page == 0 ? string.Empty : string.Format(PAGING_SKIP, page)));
             var pattern = "(FLAT FARE \\$[0-9]+(?:\\.[0-9][0-9])?)(?![\\d])";
             jsonString = Regex.Replace(jsonString, pattern, "FlatFee");
-            return JsonConvert.DeserializeObject<OData<BusRoute>>(jsonString)?.Value;
+            return JsonConvert.DeserializeObject<OData<BusRoutine>>(jsonString)?.Value;
         }
 
         /// <summary>
@@ -153,14 +163,9 @@ namespace GoLah.Services
             return JsonConvert.DeserializeObject<BusArrivalOData>(jsonString)?.Services;
         }
 
-        /// <summary>
-        /// Get bus stop description by bus stop code for UI binding converter.
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
         public BusStop GetBusStopByCode(string code)
         {
-            return CachedBusStops.SingleOrDefault(x => x.Code.Equals(code));
+            return CachedBusStops.SingleOrDefault(x => x.BusStopCode.Equals(code));
         }
 
         /// <summary>
@@ -181,6 +186,24 @@ namespace GoLah.Services
             using (var streamReader = new StreamReader(response.GetResponseStream()))
             {
                 return streamReader.ReadToEnd();
+            }
+        }
+
+        /// <summary>
+        /// Massage the bus routines to bus services.
+        /// </summary>
+        /// <param name="_cachedBusRoutines"></param>
+        /// <returns></returns>
+        private IEnumerable<BusService> MergeBusRoutineToBusService(List<BusRoutine> _cachedBusRoutines)
+        {
+            var groups = _cachedBusRoutines.GroupBy(x => x.ServiceNo);
+            foreach (var group in groups)
+            {
+                yield return new BusService()
+                {
+                    ServiceNo = group.Key,
+                    Routines = group.Select(x => x).ToArray()
+                };
             }
         }
 
