@@ -74,13 +74,11 @@
         <SplitView x:Name="splitView" DisplayMode="Inline" IsPaneOpen="True" OpenPaneLength="320">
             <SplitView.Pane>
                 <Grid>
-                    <TextBlock HorizontalAlignment="Center" Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource InvertBoolToVisibility}}">Loading...</TextBlock>
                     <ListView 
                         x:Name="lvServices"
                         ItemsSource="{Binding AllBusServices, Mode=TwoWay}" 
                         ItemTemplate="{StaticResource BusServiceTemplate}" 
                         SelectedItem="{Binding SelectedBusService, Mode=TwoWay}" 
-                        Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource BoolToVisibility}}" 
                         HorizontalContentAlignment="Left"
                         HorizontalAlignment="Stretch"
                         SelectionChanged="lvServices_SelectionChanged"/>
@@ -89,14 +87,10 @@
             <SplitView.Content>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
                         <RowDefinition Height="2*"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Border Background="Aquamarine" Grid.Row="0">
-                        <TextBlock Text="This is placeholder for bus operator logo" TextWrapping="WrapWholeWords" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50"/>
-                    </Border>
-                    <Border Background="Coral"  Grid.Row="1">
+                    <Border Background="Coral"  Grid.Row="0">
                         <Maps:MapControl x:Name="myMap" 
                                          MapServiceToken="26gqF2PKczATeqP4NL59~nQHrkiTXAN5BGCXl7ttS5Q~An_3ymPGsLumNz-EPvWc1fPWtWMfPK4jGCmDWnlVKC62QWMcwupCCwqJ0VNKwHKI"
                                          HorizontalAlignment="Stretch" 
@@ -104,7 +98,7 @@
                                          Loaded="myMap_Loaded" 
                                          d:LayoutOverrides="Height"/>
                     </Border>
-                    <Border Background="CadetBlue"  Grid.Row="2">
+                    <Border Background="CadetBlue"  Grid.Row="1">
                         <Grid Margin="100,0,100,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>

@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ViewModel="using:GoLah.ViewModel"
     x:Class="GoLah.Apps.MainPage"
-    mc:Ignorable="d">
+    mc:Ignorable="d" NavigationCacheMode="Enabled">
     <Page.DataContext>
         <ViewModel:MainPageViewModel/>
     </Page.DataContext>

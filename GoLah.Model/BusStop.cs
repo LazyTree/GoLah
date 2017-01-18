@@ -32,10 +32,14 @@ namespace GoLah.Model
         public string Description { get; set; }
 
         /// <summary>
-        /// Location coordinates for this bus stop.
+        /// Location Latitude for this bus stop.
         /// </summary>
-        public Geocoordinate Location { get; set; }
+        public string Latitude { get; set; }
 
+        /// <summary>
+        /// Location Longitude for this bus stop.
+        /// </summary>
+        public string Longitude { get; set; }
         #endregion
     }
 }
