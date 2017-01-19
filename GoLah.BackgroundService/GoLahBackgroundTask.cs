@@ -26,11 +26,12 @@ namespace GoLah.BackgroundService
             var repo = new LtaDataRepository();
             var buses = await repo.GetBusRoutesAsync(true);
             var stops = await repo.GetBusStopsAsync(true);
+            var routeStops = repo.CachedRouteStops;
 
             var notifier = ToastNotificationManager.CreateToastNotifier();
             var content = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
             var text = content.GetElementsByTagName("text");
-            text[0].InnerText = $"There are {buses.Count()} buses and {stops.Count()} stops retrieved.";
+            text[0].InnerText = $"There are {buses.Count()} buses and {stops.Count()} stops and {routeStops.Count()} route stops retrieved.";
             notifier.Show(new ToastNotification(content));
         }
 

@@ -6,7 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ViewModel="using:GoLah.ViewModel"
     xmlns:Converter="using:GoLah.Apps.Converter"
-    x:Class="GoLah.Apps.View.BusServicesPage"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    x:Class="GoLah.Apps.View.BusServicesPage"  
     mc:Ignorable="d">
     <Page.Resources>
         <Converter:BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
@@ -14,53 +15,52 @@
         <Converter:BusStopConverter x:Key="BusStopConverter"/>
 
         <DataTemplate x:Key="BusServiceTemplate">
-            <Grid Background="Wheat" Width="296" Padding="2">
-                <Border BorderBrush="Aqua"  BorderThickness="1">
-                    <StackPanel d:LayoutOverrides="Height">
-                        <TextBlock x:Name="tbServiceNo" Text="{Binding ServiceNo}" VerticalAlignment="Center" FontWeight="Bold" d:LayoutOverrides="TopPosition, BottomPosition"/>
-                        <Grid>
+
+            <Grid Width="{Binding Path=Width, RelativeSource={RelativeSource Mode=TemplatedParent} }" Margin="2,5,2,0">
+                <Line X1="0" X2="320" Y1="3" Y2="3" Stroke="Black" StrokeThickness="1"/>
+                <StackPanel Margin="0,2,0,0">
+                    <TextBlock x:Name="tbServiceNo" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding ServiceNo}"  FontWeight="Bold" FontSize="15" d:LayoutOverrides="TopPosition, BottomPosition"/>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="Operator" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Operator}" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40"/>
+                        <Grid x:Name="BidirectionalBus" Visibility="{Binding IsLoop, Converter={StaticResource InvertBoolToVisibility}}" Grid.Column="1" d:LayoutOverrides="Width, LeftPosition, RightPosition">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="Operator" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Routines[0].Operator}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40"/>
-                            <Grid x:Name="GridBidirection" Visibility="{Binding Routines[0].IsLoop, Converter={StaticResource InvertBoolToVisibility}}" Height="100" Grid.Column="1" d:LayoutOverrides="Width, LeftPosition, RightPosition">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                                <TextBlock x:Name="tbDirection1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction1" d:LayoutOverrides="Height"/>
-                                <TextBlock x:Name="tbDirection2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction2" d:LayoutOverrides="Height"/>
-                                <TextBlock x:Name="tbD1Origin" Grid.Row="1" Grid.Column="0" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD1Destination" Grid.Row="2" Grid.Column="0" Text="{Binding Routines[0].DestinationCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD2Origin" Grid.Row="1" Grid.Column="1" Text="{Binding Routines[0].DestinationCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbD2Destination" Grid.Row="2" Grid.Column="1" Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbBusCategory" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Routines[0].Category}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>
-
-                            </Grid>
-                            <Grid Grid.Column="1" Visibility="{Binding Routines[0].IsLoop, Converter={StaticResource BoolToVisibility}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-
-                                <TextBlock x:Name="tbLoop" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Loop" d:LayoutOverrides="Height"/>
-                                <TextBlock x:Name="tbOriginDest" Grid.Row="1"  Text="{Binding Routines[0].OriginCode, Converter={StaticResource BusStopConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbLoopDescription" Grid.Row="2" Text="{Binding Routines[0].LoopDescription}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                <TextBlock x:Name="tbLoopBusCategory" Grid.Row="3" Text="{Binding Routines[0].Category}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" FontStyle="Italic"/>
-                            </Grid>
+                            <TextBlock x:Name="tbDirection1" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction1" FontSize="12" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbDirection2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction2" FontSize="12" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbD1Origin" Grid.Row="1" Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding Directions[0].Origin}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbD1Destination" Grid.Row="2" Grid.Column="0" TextWrapping="WrapWholeWords" Text="{Binding Directions[0].Destination}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbD2Origin" Grid.Row="1" Grid.Column="1" TextWrapping="WrapWholeWords" Text="{Binding Directions[1].Origin}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbD2Destination" Grid.Row="2" Grid.Column="1" TextWrapping="WrapWholeWords" Text="{Binding Directions[1].Destination}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
-                    </StackPanel>
-                </Border>
+                        <Grid x:Name="LoopBus" Grid.Column="1" Visibility="{Binding IsLoop, Converter={StaticResource BoolToVisibility}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Name="tbLoop" Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="Loop Service Loop at:" FontSize="12" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbLoopDescription" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="WrapWholeWords" Text="{Binding LoopDescription}" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbOriginDestTag" Grid.Row="1"  Text="Start/End at" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="tbOriginDest" Grid.Row="1" TextWrapping="WrapWholeWords" Text="{Binding Directions[0].Origin}" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+          
+                        </Grid>
+                    </Grid>
+                </StackPanel>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -70,17 +70,89 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="3*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <TextBlock Margin="20" Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource InvertBoolToVisibility} }">Loading...</TextBlock>
-            <ListView x:Name="BusServices" 
-                  ItemsSource="{Binding AllBusServices, Mode=TwoWay}"
-                  ItemTemplate="{StaticResource BusServiceTemplate}"
-                  Visibility="{Binding IsBusServiceInfoReady, Converter={StaticResource BoolToVisibility}}"/>
-        </StackPanel>
-        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ScreenSize">
+                <VisualState x:Name="Small">
+                    <VisualState.Setters>
+                        <Setter Target="splitView.(SplitView.DisplayMode)" Value="Overlay"/>
+                        <Setter Target="splitView.(SplitView.IsPaneOpen)" Value="False"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Medium">
+                    <VisualState.Setters>
+                        <Setter Target="splitView.(SplitView.IsPaneOpen)" Value="True"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="700"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <SplitView x:Name="splitView" DisplayMode="Inline" IsPaneOpen="True" OpenPaneLength="320">
+            <SplitView.Pane>
+                <Grid>
+                    <ListView 
+                        x:Name="lvServices"
+                        ItemsSource="{Binding AllBusServices, Mode=TwoWay}" 
+                        ItemTemplate="{StaticResource BusServiceTemplate}" 
+                        SelectedItem="{Binding SelectedBusService, Mode=TwoWay}" 
+                        HorizontalContentAlignment="Left"
+                        HorizontalAlignment="Stretch"
+                        SelectionChanged="lvServices_SelectionChanged"/>
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Background="Coral"  Grid.Row="0">
+                        <Maps:MapControl x:Name="myMap" 
+                                         MapServiceToken="26gqF2PKczATeqP4NL59~nQHrkiTXAN5BGCXl7ttS5Q~An_3ymPGsLumNz-EPvWc1fPWtWMfPK4jGCmDWnlVKC62QWMcwupCCwqJ0VNKwHKI"
+                                         HorizontalAlignment="Stretch" 
+                                         VerticalAlignment="Stretch" 
+                                         Loaded="myMap_Loaded" 
+                                         d:LayoutOverrides="Height"/>
+                    </Border>
+                    <Border Background="CadetBlue"  Grid.Row="1">
+                        <Grid Margin="100,0,100,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="tbAmPeak" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="AM Peak" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbAmOffPeak" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="AM Off-Peak" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbPmPeak" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="PM Peak" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbPmOffPeak" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Left" Margin="0,0,0,0" TextWrapping="Wrap" Text="PM Off-Peak" d:LayoutOverrides="Height"/>
+
+                            <TextBlock x:Name="tbDirection1" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction 1" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbAmPeakValue" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedBusService.Directions[0].Timing.MorningPeakFrequency}" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbAmPffPeakValue" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedBusService.Directions[0].Timing.MorningOffpeakFrequency}" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbPmPeakValue" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedBusService.Directions[0].Timing.EveningPeakFrequency}" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbPmOffPeakValue" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedBusService.Directions[0].Timing.MorningOffpeakFrequency}" d:LayoutOverrides="Height"/>
+
+                            <TextBlock x:Name="tbDirection2" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="Direction 2" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbAmPeakValue2" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedBusService.Directions[0].Timing.MorningPeakFrequency}" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbAmPffPeakValue2" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedBusService.Directions[0].Timing.MorningOffpeakFrequency}" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbPmPeakValue2" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedBusService.Directions[0].Timing.EveningPeakFrequency}" d:LayoutOverrides="Height"/>
+                            <TextBlock x:Name="tbPmOffPeakValue2" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedBusService.Directions[0].Timing.MorningOffpeakFrequency}" d:LayoutOverrides="Height"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <!--<Image x:Name="Operator" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill"/>-->
+            </SplitView.Content>
+        </SplitView>
     </Grid>
 </Page>

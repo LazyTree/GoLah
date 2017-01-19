@@ -93,54 +93,37 @@ namespace GoLah.Apps.View
                 });
             }
 
-            for (int i = 0; i < 5; i++)
+            var service = lvServices.SelectedItem as BusService;
+
+            if (service == null)
             {
+                return;
+            }
+
+            var originBusStop = service.Directions.First().Stops.FirstOrDefault();
+
+            myMap.Center = new Geopoint(new BasicGeoposition()
+            {
+                Latitude = double.Parse(originBusStop?.Latitude),
+                Longitude = double.Parse(originBusStop?.Longitude)
+            });
+            myMap.ZoomLevel = 12;
+
+            foreach (var busStop in service.Directions.First().Stops)
+            {
+
                 MapIcon mapIcon = new MapIcon();
                 mapIcon.Location = new Geopoint(new BasicGeoposition()
                 {
-                    Latitude = rnd.Next(0, 89),
-                    Longitude = rnd.Next(0, 179)
-                });
-
+                    Latitude = double.Parse(busStop.Latitude),
+                    Longitude = double.Parse(busStop.Longitude)
+                }); ;
                 mapIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-                mapIcon.Title = "YoYoYo! LazyTree!";
+                mapIcon.Title = busStop.RoadName;
                 mapIcon.Image = _mapIconStreamReference;
                 mapIcon.ZIndex = 0;
                 myMap.MapElements.Add(mapIcon);
             }
-
-            //// TODO: check why location infor is null.
-            //var service = lvServices.SelectedItem as BusService;
-
-            //if (service == null)
-            //{
-            //    return;
-            //}
-
-            //var originBusStop = service.Directions.First().Stops.First();
-
-            //myMap.Center = new Geopoint(new BasicGeoposition()
-            //{
-            //    Latitude = originBusStop.Location.Latitude,
-            //    Longitude = originBusStop.Location.Longitude
-            //});
-
-
-            //foreach(var busStop in service.Directions.First().Stops)
-            //{
-
-            //    MapIcon mapIcon = new MapIcon();
-            //    mapIcon.Location = new Geopoint(new BasicGeoposition()
-            //    {
-            //        Latitude = busStop.Location.Latitude,
-            //        Longitude = busStop.Location.Longitude
-            //    }); ;
-            //    mapIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            //    mapIcon.Title = "YoYoYo!";
-            //    mapIcon.Image = _mapIconStreamReference;
-            //    mapIcon.ZIndex = 0;
-            //    myMap.MapElements.Add(mapIcon);
-            //}
         }
     }
 }

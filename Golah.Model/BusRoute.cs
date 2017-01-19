@@ -49,22 +49,26 @@ namespace GoLah.Model
         /// <summary>
         /// Frequence of dispatch for AM Peak 0630H - 0830H (range in minutes).
         /// </summary>
-        public uint MorningPeakFrequency { get; set; }
+        [JsonProperty("AM_Peak_Freq")]
+        public string MorningPeakFrequency { get; set; }
 
         /// <summary>
         /// Frequency of dispatch for AM Off-Peak 0831H - 1659H (range in minutes).
         /// </summary>
-        public uint MorningOffpeakFrequency { get; set; }
+        [JsonProperty("AM_Offpeak_Freq")]
+        public string MorningOffpeakFrequency { get; set; }
 
         /// <summary>
         /// Frequency of dispatch for PM Peak 1700H - 1900H (range in minutes).
         /// </summary>
-        public uint EveningPeakFrequency { get; set; }
+        [JsonProperty("PM_Peak_Freq")]
+        public string EveningPeakFrequency { get; set; }
 
         /// <summary>
         /// Frequency of dispatch for PM Off-Peak after 1900H (range in minutes).
         /// </summary>
-        public uint EveningOffPeakFrequency { get; set; }
+        [JsonProperty("PM_Offpeak_Freq")]
+        public string EveningOffPeakFrequency { get; set; }
 
         /// <summary>
         /// Location at which the bus service loops, empty if not a loop service.

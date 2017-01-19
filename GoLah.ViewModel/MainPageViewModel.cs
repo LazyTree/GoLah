@@ -98,6 +98,7 @@ namespace GoLah.ViewModel
             {
                 var repo = new LtaDataRepository();
                 await repo.GetBusStopsAsync();
+                await repo.GetBusRouteStopsAsync();
                 await repo.GetBusRoutesAsync();
                 LoadingState = LoadingStates.Loaded;
             }

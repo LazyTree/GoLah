@@ -24,13 +24,15 @@ namespace GoLah.Model
         public DateTime? EstimatedArrival { get; set; }
 
         /// <summary>
-        /// Estimated location coordinates of bus at point of published data.
+        /// Estimated location Latitude of bus at point of published data.
         /// Values will be “0” if bus has yet to leave the interchange.
         /// </summary>
-        [JsonIgnore]
-        public Geocoordinate Location { get; set; }
-
         public string Latitude { get; set; }
+
+        /// <summary>
+        /// Estimated location Longitude of bus at point of published data.
+        /// Values will be “0” if bus has yet to leave the interchange.
+        /// </summary>
         public string Longitude { get; set; }
 
         /// <summary>
