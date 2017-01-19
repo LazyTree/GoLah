@@ -70,7 +70,27 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ScreenSize">
+                <VisualState x:Name="Small">
+                    <VisualState.Setters>
+                        <Setter Target="splitView.(SplitView.DisplayMode)" Value="Overlay"/>
+                        <Setter Target="splitView.(SplitView.IsPaneOpen)" Value="False"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Medium">
+                    <VisualState.Setters>
+                        <Setter Target="splitView.(SplitView.IsPaneOpen)" Value="True"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="700"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <SplitView x:Name="splitView" DisplayMode="Inline" IsPaneOpen="True" OpenPaneLength="320">
             <SplitView.Pane>
                 <Grid>
