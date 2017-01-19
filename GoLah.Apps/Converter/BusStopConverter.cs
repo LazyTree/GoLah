@@ -19,7 +19,7 @@ namespace GoLah.Apps.Converter
 
             var repo = new LtaDataRepository();
 
-            return repo.GetBusStopByCode(value.ToString())?.Description ?? value.ToString();
+            return repo.GetBusStopByCodeAsync(value.ToString()).Result?.Description ?? value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

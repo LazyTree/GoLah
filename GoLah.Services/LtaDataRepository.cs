@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace GoLah.Services
 {
@@ -35,53 +36,6 @@ namespace GoLah.Services
 
         #region Properties
 
-        /// <summary>
-        /// Cached bus stops.
-        /// </summary>
-        public List<BusStop> CachedBusStops
-        {
-            get
-            {
-                if(!_cachedBusStops.Any())
-                {
-                    _cachedBusStops = Task.Run(() => GetBusStopsAsync()).Result.ToList();
-                }
-                return _cachedBusStops;
-            }
-        }
-
-        /// <summary>
-        /// Cached bus routes.
-        /// </summary>
-        public List<BusRoute> CachedRoutes
-        {
-            get
-            {
-                if (!_cachedBusRoutes.Any())
-                {
-                    _cachedBusRoutes = Task.Run(() => GetBusRoutesAsync()).Result.ToList();
-                }
-
-                return _cachedBusRoutes;
-            }
-        }
-
-        /// <summary>
-        /// Cached bus route stops.
-        /// </summary>
-        public List<BusRouteStop> CachedRouteStops
-        {
-            get
-            {
-                if (!_cachedBusRoutes.Any())
-                {
-                    _cachedBusRouteStops = Task.Run(() => GetBusRouteStopsAsync()).Result.ToList();
-                }
-
-                return _cachedBusRouteStops;
-            }
-        }
-
         #endregion
 
         #region Methods
@@ -89,13 +43,24 @@ namespace GoLah.Services
         /// <summary>
         /// Get all bus stops.
         /// </summary>
-        /// <param name="useCache">True to get cached result. False to get fresh result.</param>
+        /// <param name="refresh">True to get fresh result online. False to get result from local file cache or RAM cache.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<BusStop>> GetBusStopsAsync(bool useCache = true)
+        public async Task<IEnumerable<BusStop>> GetBusStopsAsync(bool refresh = false)
         {
-            if (useCache && _cachedBusStops.Any())
+            if (!refresh)
             {
-                return _cachedBusStops;
+                if (_cachedBusStops.Any())
+                {
+                    return _cachedBusStops;
+                }
+                else
+                {
+                    _cachedBusStops = await LoadCacheAsync<BusStop>();
+                    if (_cachedBusStops.Any())
+                    {
+                        return _cachedBusStops;
+                    }
+                }
             }
 
             int page = 0;
@@ -108,6 +73,9 @@ namespace GoLah.Services
                 page += PAGE_SIZE;
             }
             while (result.Count() == PAGE_SIZE);
+
+            await SaveCacheAsync(_cachedBusStops);
+
             return _cachedBusStops;
         }
 
@@ -125,13 +93,24 @@ namespace GoLah.Services
         /// <summary>
         /// Get the all bus routes.
         /// </summary>
-        /// <param name="useCache">True to get cached result. False to get fresh result.</param>
+        /// <param name="useCache">True to get fresh result online. False to get result from local file cache or RAM cache.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<BusRoute>> GetBusRoutesAsync(bool useCache = true)
+        public async Task<IEnumerable<BusRoute>> GetBusRoutesAsync(bool refresh = false)
         {
-            if(useCache && _cachedBusRoutes.Any())
+            if (!refresh)
             {
-                return _cachedBusRoutes;
+                if (_cachedBusRoutes.Any())
+                {
+                    return _cachedBusRoutes;
+                }
+                else
+                {
+                    _cachedBusRoutes = await LoadCacheAsync<BusRoute>();
+                    if (_cachedBusRoutes.Any())
+                    {
+                        return _cachedBusRoutes;
+                    }
+                }
             }
 
             int page = 0;
@@ -151,12 +130,15 @@ namespace GoLah.Services
                 .Select(s => s.BusStopCode)
                 .ToList());
 
+            await SaveCacheAsync(_cachedBusRoutes);
+
             return _cachedBusRoutes;
         }
 
         /// <summary>
         /// Get the bus service by page (50 records per page)
         /// </summary>
+        /// <param name="page"></param>
         /// <returns></returns>
         public async Task<IEnumerable<BusRoute>> GetBusRoutesByPageAsync(int page)
         {
@@ -169,13 +151,24 @@ namespace GoLah.Services
         /// <summary>
         /// Get the all bus routes stops.
         /// </summary>
-        /// <param name="useCache">True to get cached result. False to get fresh result.</param>
+        /// <param name="useCache">True to get fresh result online. False to get result from local file cache or RAM cache.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<BusRouteStop>> GetBusRouteStopsAsync(bool useCache = true)
+        public async Task<IEnumerable<BusRouteStop>> GetBusRouteStopsAsync(bool refresh = false)
         {
-            if (useCache && _cachedBusRouteStops.Any())
+            if (!refresh)
             {
-                return _cachedBusRouteStops;
+                if (_cachedBusRouteStops.Any())
+                {
+                    return _cachedBusRouteStops;
+                }
+                else
+                {
+                    _cachedBusRouteStops = await LoadCacheAsync<BusRouteStop>();
+                    if (_cachedBusRouteStops.Any())
+                    {
+                        return _cachedBusRouteStops;
+                    }
+                }
             }
 
             int page = 0;
@@ -189,12 +182,15 @@ namespace GoLah.Services
             }
             while (result.Count() == PAGE_SIZE);
 
+            await SaveCacheAsync(_cachedBusRouteStops);
+
             return _cachedBusRouteStops;
         }
 
         /// <summary>
         /// Get the bus service by page (50 records per page)
         /// </summary>
+        /// <param name="page"></param>
         /// <returns></returns>
         public async Task<IEnumerable<BusRouteStop>> GetBusRouteStopsByPageAsync(int page)
         {
@@ -218,9 +214,10 @@ namespace GoLah.Services
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public BusStop GetBusStopByCode(string code)
+        public async Task<BusStop> GetBusStopByCodeAsync(string code)
         {
-            return CachedBusStops.SingleOrDefault(x => x.Code.Equals(code));
+            var result = await GetBusStopsAsync().ConfigureAwait(false);
+            return result.SingleOrDefault(x => x.Code.Equals(code));
         }
 
         /// <summary>
@@ -243,6 +240,39 @@ namespace GoLah.Services
                 return streamReader.ReadToEnd();
             }
         }
+
+        private async Task SaveCacheAsync<T>(List<T> _cachedItems)
+        {
+            var filePath = GetLocalCacheFilePath<T>();
+            using (var stream = new FileStream(filePath, FileMode.OpenOrCreate))
+            using (var streamWriter = new StreamWriter(stream))
+            {
+                await streamWriter.WriteAsync(JsonConvert.SerializeObject(_cachedItems));
+            }
+        }
+
+        private async Task<List<T>> LoadCacheAsync<T>()
+        {
+            var filePath = GetLocalCacheFilePath<T>();
+            if (!File.Exists(filePath))
+            {
+                return new List<T>();
+            }
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            using (var streamReader = new StreamReader(stream))
+            {
+                var jsonString = await streamReader.ReadToEndAsync();
+                var pattern = "(FLAT FARE \\$[0-9]+(?:\\.[0-9][0-9])?)(?![\\d])";
+                jsonString = Regex.Replace(jsonString, pattern, "FlatFee");
+                return JsonConvert.DeserializeObject<List<T>>(jsonString);
+            }
+        }
+
+        private string GetLocalCacheFilePath<T>()
+        {
+            return Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, $"{typeof(T).Name}s.json");
+        }
+
 
         #endregion
     }

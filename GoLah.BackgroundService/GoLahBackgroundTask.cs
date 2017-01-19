@@ -24,9 +24,9 @@ namespace GoLah.BackgroundService
         private async Task SendNotification()
         {
             var repo = new LtaDataRepository();
-            var buses = await repo.GetBusRoutesAsync(true);
-            var stops = await repo.GetBusStopsAsync(true);
-            var routeStops = repo.CachedRouteStops;
+            var buses = await repo.GetBusRoutesAsync();
+            var stops = await repo.GetBusStopsAsync();
+            var routeStops = await repo.GetBusRouteStopsAsync();
 
             var notifier = ToastNotificationManager.CreateToastNotifier();
             var content = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);

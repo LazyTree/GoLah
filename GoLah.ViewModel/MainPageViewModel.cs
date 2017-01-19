@@ -102,7 +102,7 @@ namespace GoLah.ViewModel
                 await repo.GetBusRoutesAsync();
                 LoadingState = LoadingStates.Loaded;
             }
-            catch
+            catch (Exception ex)
             {
                 LoadingState = LoadingStates.Error;
             }

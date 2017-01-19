@@ -13,7 +13,6 @@ namespace GoLah.ViewModel
     {
         private ObservableCollection<BusService> _allBusServices = new ObservableCollection<BusService>();
         private BusService _selectedBusService;
-        private bool _isBusServiceInfoReady = false;
 
         public BusServicesPageViewModel()
         {
@@ -39,7 +38,7 @@ namespace GoLah.ViewModel
             }
             else
             {
-                LoadData();
+                LoadDataAsync();
             }
         }
 
@@ -64,10 +63,11 @@ namespace GoLah.ViewModel
             }
         }
 
-        private void LoadData()
+        private async void LoadDataAsync()
         {
             var repository = new LtaDataRepository();
-            AllBusServices = new ObservableCollection<BusService>(MergeBusRoutesToBusService(repository.CachedRoutes));
+            var routes = await repository.GetBusRoutesAsync();
+            AllBusServices = new ObservableCollection<BusService>(await MergeBusRoutesToBusServiceAsync(routes));
             SelectedBusService = AllBusServices.First();
         }
 
@@ -77,11 +77,11 @@ namespace GoLah.ViewModel
         /// </summary>
         /// <param name="_cachedBusRoutes"></param>
         /// <returns></returns>
-        private IEnumerable<BusService> MergeBusRoutesToBusService(List<BusRoute> busRoutes)
+        private async Task<IEnumerable<BusService>> MergeBusRoutesToBusServiceAsync(IEnumerable<BusRoute> busRoutes)
         {
             var repository = new LtaDataRepository();
 
-            var allStops = repository.CachedBusStops;
+            var allStops = await repository.GetBusStopsAsync();
 
             var groups = busRoutes.GroupBy(x => x.ServiceNo);
 
@@ -103,10 +103,10 @@ namespace GoLah.ViewModel
                         Stops = r.BusStopCodes == null? new List<BusStop>() : allStops.Where(s => r.BusStopCodes.Contains(s.Code)).ToList(),
                         Timing = new BusTiming
                         {
-                            EveningOffPeakFrequency = r.EveningOffPeakFrequency + "mins",
-                            EveningPeakFrequency = r.EveningPeakFrequency + "mins",
-                            MorningOffpeakFrequency = r.MorningOffpeakFrequency + "mins",
-                            MorningPeakFrequency = r.MorningPeakFrequency + "mins"
+                            EveningOffPeakFrequency = r.EveningOffPeakFrequency + " mins",
+                            EveningPeakFrequency = r.EveningPeakFrequency + " mins",
+                            MorningOffpeakFrequency = r.MorningOffpeakFrequency + " mins",
+                            MorningPeakFrequency = r.MorningPeakFrequency + " mins"
                         }
 
                     }).ToArray()
