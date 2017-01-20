@@ -93,7 +93,7 @@ namespace GoLah.ViewModel
                 services.Add( new BusService
                 {
                     ServiceNo = group.Key,
-                    Operator = group.First().Operator,
+                    Operator = (BusOperator)Enum.Parse(typeof(BusOperator), group.First().Operator, true),
                     LoopDescription = group.First().LoopDescription,
                     Directions = group.Select(r => new BusDirection
                     {

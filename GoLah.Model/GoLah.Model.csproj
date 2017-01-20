@@ -120,6 +120,7 @@
     <Compile Include="BusStop.cs" />
     <Compile Include="BusTiming.cs" />
     <Compile Include="NextBus.cs" />
+    <Compile Include="BusOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GoLah.Common.rd.xml" />
   </ItemGroup>
