@@ -96,10 +96,9 @@ namespace GoLah.ViewModel
         {
             try
             {
-                var repo = new LtaDataRepository();
-                await repo.GetBusStopsAsync();
-                await repo.GetBusRouteStopsAsync();
-                await repo.GetBusRoutesAsync();
+                await new LtaDataRepository<BusStop>().QueryAsync();
+                await new LtaDataRepository<BusRouteStop>().QueryAsync();
+                await new LtaDataRepository<BusRoute>().QueryAsync();
                 LoadingState = LoadingStates.Loaded;
             }
             catch (Exception ex)

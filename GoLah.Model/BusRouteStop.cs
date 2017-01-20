@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoLah.Model
 {
-    public class BusRouteStop
+    public class BusRouteStop : LtaData
     {
         public string ServiceNo { get; set; }
         public string Operator { get; set; }
@@ -27,5 +27,7 @@ namespace GoLah.Model
         public string SundayFirstBusTime { get; set; }
         [JsonProperty("SUN_LastBus")]
         public string SundayLastBusTime { get; set; }
+
+        public override string ServiceUrl => "BusRoutes";
     }
 }

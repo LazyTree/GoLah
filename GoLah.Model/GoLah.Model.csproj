@@ -119,6 +119,7 @@
     <Compile Include="BusStatus.cs" />
     <Compile Include="BusStop.cs" />
     <Compile Include="BusTiming.cs" />
+    <Compile Include="LtaData.cs" />
     <Compile Include="NextBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GoLah.Common.rd.xml" />

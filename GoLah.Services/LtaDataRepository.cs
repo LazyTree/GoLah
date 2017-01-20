@@ -13,211 +13,31 @@ using Windows.Storage;
 
 namespace GoLah.Services
 {
-    public class LtaDataRepository
+    public class LtaDataRepositoryBase<T> where T : LtaData, new()
     {
         #region Fields
 
-        private const string URI = @"http://datamall2.mytransport.sg/ltaodataservice/";
-        private const string key = @"4DZEmxtLQOmpRFW8vgqmTA==";
-        private const string accept = "application/json";
+        protected const string URI = @"http://datamall2.mytransport.sg/ltaodataservice/";
+        protected const string key = @"4DZEmxtLQOmpRFW8vgqmTA==";
+        protected const string accept = "application/json";
 
-        private const string BUS_STOPS = "BusStops";
-        private const string BUS_SERVICES = "BusServices";
-        private const string BUS_ROUTES = "BusRoutes";
-        private const string BUS_ARRIVAL = "BusArrival?BusStopID={0}";
-        private const string PAGING_SKIP = @"?$skip={0}";
-        private const int PAGE_SIZE = 50;
-
-        private static List<BusRoute> _cachedBusRoutes = new List<BusRoute>();
-        private static List<BusStop> _cachedBusStops = new List<BusStop>();
-        private static List<BusRouteStop> _cachedBusRouteStops = new List<BusRouteStop>();
-
-        #endregion
-
-        #region Properties
+        protected static List<T> _cachedItems = new List<T>();
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// Get all bus stops.
+        /// Get Lta data from REST API.
         /// </summary>
         /// <param name="refresh">True to get fresh result online. False to get result from local file cache or RAM cache.</param>
+        /// <param name="query">Query string that need to pass to the request URL.</param>
         /// <returns></returns>
-        public async Task<IEnumerable<BusStop>> GetBusStopsAsync(bool refresh = false)
+        public virtual async Task<IEnumerable<T>> QueryAsync(bool refresh = false, string query = "")
         {
-            if (!refresh)
-            {
-                if (_cachedBusStops.Any())
-                {
-                    return _cachedBusStops;
-                }
-                else
-                {
-                    _cachedBusStops = await LoadCacheAsync<BusStop>();
-                    if (_cachedBusStops.Any())
-                    {
-                        return _cachedBusStops;
-                    }
-                }
-            }
-
-            int page = 0;
-            IEnumerable<BusStop> result;
-            _cachedBusStops.Clear();
-            do
-            {
-                result = await GetBusStopsByPageAsync(page);
-                _cachedBusStops.AddRange(result);
-                page += PAGE_SIZE;
-            }
-            while (result.Count() == PAGE_SIZE);
-
-            await SaveCacheAsync(_cachedBusStops);
-
-            return _cachedBusStops;
-        }
-
-        /// <summary>
-        /// Get the bus stops by page (50 records per page)
-        /// </summary>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<BusStop>> GetBusStopsByPageAsync(int page)
-        {
-            var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_STOPS, page == 0 ? string.Empty : string.Format(PAGING_SKIP, page)));
-            return JsonConvert.DeserializeObject<OData<BusStop>>(jsonString)?.Value;
-        }
-
-        /// <summary>
-        /// Get the all bus routes.
-        /// </summary>
-        /// <param name="useCache">True to get fresh result online. False to get result from local file cache or RAM cache.</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<BusRoute>> GetBusRoutesAsync(bool refresh = false)
-        {
-            if (!refresh)
-            {
-                if (_cachedBusRoutes.Any())
-                {
-                    return _cachedBusRoutes;
-                }
-                else
-                {
-                    _cachedBusRoutes = await LoadCacheAsync<BusRoute>();
-                    if (_cachedBusRoutes.Any())
-                    {
-                        return _cachedBusRoutes;
-                    }
-                }
-            }
-
-            int page = 0;
-            IEnumerable<BusRoute> result;
-            _cachedBusRoutes.Clear();
-            do
-            {
-                result = await GetBusRoutesByPageAsync(page);
-                _cachedBusRoutes.AddRange(result.ToList());
-                page += PAGE_SIZE;
-            }
-            while (result.Count() == PAGE_SIZE);
-
-            _cachedBusRoutes.ForEach(x => x.BusStopCodes = 
-                _cachedBusRouteStops.Where(s => s.ServiceNo == x.ServiceNo && s.Direction == x.Direction)
-                .OrderBy(s => s.StopSequence)
-                .Select(s => s.BusStopCode)
-                .ToList());
-
-            await SaveCacheAsync(_cachedBusRoutes);
-
-            return _cachedBusRoutes;
-        }
-
-        /// <summary>
-        /// Get the bus service by page (50 records per page)
-        /// </summary>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<BusRoute>> GetBusRoutesByPageAsync(int page)
-        {
-            var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_SERVICES, page == 0 ? string.Empty : string.Format(PAGING_SKIP, page)));
-            var pattern = "(FLAT FARE \\$[0-9]+(?:\\.[0-9][0-9])?)(?![\\d])";
-            jsonString = Regex.Replace(jsonString, pattern, "FlatFee");
-            return JsonConvert.DeserializeObject<OData<BusRoute>>(jsonString)?.Value;
-        }
-
-        /// <summary>
-        /// Get the all bus routes stops.
-        /// </summary>
-        /// <param name="useCache">True to get fresh result online. False to get result from local file cache or RAM cache.</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<BusRouteStop>> GetBusRouteStopsAsync(bool refresh = false)
-        {
-            if (!refresh)
-            {
-                if (_cachedBusRouteStops.Any())
-                {
-                    return _cachedBusRouteStops;
-                }
-                else
-                {
-                    _cachedBusRouteStops = await LoadCacheAsync<BusRouteStop>();
-                    if (_cachedBusRouteStops.Any())
-                    {
-                        return _cachedBusRouteStops;
-                    }
-                }
-            }
-
-            int page = 0;
-            IEnumerable<BusRouteStop> result;
-            _cachedBusRouteStops.Clear();
-            do
-            {
-                result = await GetBusRouteStopsByPageAsync(page);
-                _cachedBusRouteStops.AddRange(result.ToList());
-                page += PAGE_SIZE;
-            }
-            while (result.Count() == PAGE_SIZE);
-
-            await SaveCacheAsync(_cachedBusRouteStops);
-
-            return _cachedBusRouteStops;
-        }
-
-        /// <summary>
-        /// Get the bus service by page (50 records per page)
-        /// </summary>
-        /// <param name="page"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<BusRouteStop>> GetBusRouteStopsByPageAsync(int page)
-        {
-            var jsonString = await GetResponseStringAsync(string.Concat(URI, BUS_ROUTES, page == 0 ? string.Empty : string.Format(PAGING_SKIP, page)));
-            return JsonConvert.DeserializeObject<OData<BusRouteStop>>(jsonString)?.Value;
-        }
-
-        /// <summary>
-        /// Get bus arrival info of the specified bus stop.
-        /// </summary>
-        /// <param name="busStopId"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<ArrivalBusService>> GetNextBusAsync(string busStopId)
-        {
-            var jsonString = await GetResponseStringAsync(string.Concat(URI, string.Format(BUS_ARRIVAL, busStopId)));
-            return JsonConvert.DeserializeObject<BusArrivalOData>(jsonString)?.Services;
-        }
-
-        /// <summary>
-        /// Get bus stop description by bus stop code for UI binding converter.
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        public async Task<BusStop> GetBusStopByCodeAsync(string code)
-        {
-            var result = await GetBusStopsAsync().ConfigureAwait(false);
-            return result.SingleOrDefault(x => x.Code.Equals(code));
+            var jsonString = await GetResponseStringAsync(string.Concat(URI, string.Format(new T().ServiceUrl, query))).ConfigureAwait(false);
+            _cachedItems = JsonConvert.DeserializeObject<OData<T>>(jsonString)?.Service;
+            return _cachedItems;
         }
 
         /// <summary>
@@ -225,7 +45,7 @@ namespace GoLah.Services
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        private async Task<string> GetResponseStringAsync(string url)
+        protected async Task<string> GetResponseStringAsync(string url)
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             var headers = new WebHeaderCollection();
@@ -234,13 +54,107 @@ namespace GoLah.Services
             httpWebRequest.Headers = headers;
             httpWebRequest.Method = "GET";
 
-            var response = await httpWebRequest.GetResponseAsync();
+            var response = await httpWebRequest.GetResponseAsync().ConfigureAwait(false);
             using (var streamReader = new StreamReader(response.GetResponseStream()))
             {
                 return streamReader.ReadToEnd();
             }
         }
 
+        #endregion
+    }
+
+    public class LtaDataRepository<T> : LtaDataRepositoryBase<T> where T : LtaData, new()
+    {
+        #region Fields
+
+        public const string PAGING_SKIP = @"?$skip={0}";
+        public const int PAGE_SIZE = 50;
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Get Lta paged data from REST API.
+        /// </summary>
+        /// <param name="refresh">True to get fresh result online. False to get result from local file cache or RAM cache.</param>
+        /// <param name="query">Query string that need to pass to the request URL.</param>
+        /// <returns></returns>
+        public override async Task<IEnumerable<T>> QueryAsync(bool refresh = false, string query = "")
+        {
+            if (!refresh)
+            {
+                if (_cachedItems.Any())
+                {
+                    return _cachedItems;
+                }
+                else
+                {
+                    _cachedItems = await LoadCacheAsync<T>().ConfigureAwait(false);
+                    if (_cachedItems.Any())
+                    {
+                        return _cachedItems;
+                    }
+                }
+            }
+
+            int page = 0;
+            IEnumerable<T> result;
+            _cachedItems.Clear();
+            do
+            {
+                result = await QueryByPageAsync(page).ConfigureAwait(false);
+                _cachedItems.AddRange(result.ToList());
+                page += PAGE_SIZE;
+            }
+            while (result.Count() == PAGE_SIZE);
+
+            await SaveCacheAsync(_cachedItems).ConfigureAwait(false);
+
+            return _cachedItems;
+        }
+
+        /// <summary>
+        /// Get the Lta data array by page (50 records per page)
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<T>> QueryByPageAsync(int page)
+        {
+            var jsonString = await GetResponseStringAsync(string.Concat(
+                    URI, 
+                    new T().ServiceUrl, 
+                    page == 0 ? string.Empty : string.Format(PAGING_SKIP, page)
+                    )).ConfigureAwait(false);
+            
+            // ugly workaround for lousy lta data
+            if (typeof(T) == typeof(BusRoute))
+            {
+                var pattern = "(FLAT FARE \\$[0-9]+(?:\\.[0-9][0-9])?)(?![\\d])";
+                jsonString = Regex.Replace(jsonString, pattern, "FlatFee");
+            }
+
+            return JsonConvert.DeserializeObject<OData<T>>(jsonString)?.Value;
+        }
+
+        /// <summary>
+        /// Get the single 
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public async Task<T> GetAsync(Func<T, bool> predicate)
+        {
+            var result = await QueryAsync().ConfigureAwait(false);
+            return result.SingleOrDefault(predicate);
+        }
+
+        /// <summary>
+        /// Save data array to the local cache.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_cachedItems"></param>
+        /// <returns></returns>
         private async Task SaveCacheAsync<T>(List<T> _cachedItems)
         {
             var filePath = GetLocalCacheFilePath<T>();
@@ -251,6 +165,11 @@ namespace GoLah.Services
             }
         }
 
+        /// <summary>
+        /// Load the data array from the local cache.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         private async Task<List<T>> LoadCacheAsync<T>()
         {
             var filePath = GetLocalCacheFilePath<T>();
@@ -262,17 +181,19 @@ namespace GoLah.Services
             using (var streamReader = new StreamReader(stream))
             {
                 var jsonString = await streamReader.ReadToEndAsync();
-                var pattern = "(FLAT FARE \\$[0-9]+(?:\\.[0-9][0-9])?)(?![\\d])";
-                jsonString = Regex.Replace(jsonString, pattern, "FlatFee");
                 return JsonConvert.DeserializeObject<List<T>>(jsonString);
             }
         }
 
+        /// <summary>
+        /// Get local cache file by the naming convention: {TypeName}s.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         private string GetLocalCacheFilePath<T>()
         {
             return Path.Combine(ApplicationData.Current.LocalCacheFolder.Path, $"{typeof(T).Name}s.json");
         }
-
 
         #endregion
     }

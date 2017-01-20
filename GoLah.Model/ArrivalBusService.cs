@@ -10,7 +10,7 @@ namespace GoLah.Model
     /// <summary>
     /// Arrival bus service information.
     /// </summary>
-    public class ArrivalBusService
+    public class ArrivalBusService : LtaData
     {
         /// <summary>
         /// The bus service number.
@@ -51,5 +51,7 @@ namespace GoLah.Model
         /// Third oncoming bus .
         /// </summary>
         public NextBus SubsequentBus3 { get; set; }
+
+        public override string ServiceUrl => "BusArrival?BusStopID={0}";
     }
 }

@@ -11,7 +11,7 @@ namespace GoLah.Model
     /// <summary>
     /// Bus service information.
     /// </summary>
-    public class BusRoute
+    public class BusRoute : LtaData
     {
         #region Properties
 
@@ -80,6 +80,8 @@ namespace GoLah.Model
         /// Codes of bus stops along the route.
         /// </summary>
         public List<string> BusStopCodes { get; set; }
+
+        public override string ServiceUrl => "BusServices";
 
         #endregion
     }

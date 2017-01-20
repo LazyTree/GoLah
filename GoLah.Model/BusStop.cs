@@ -11,7 +11,7 @@ namespace GoLah.Model
     /// <summary>
     /// Bus stop information.
     /// </summary>
-    public class BusStop
+    public class BusStop : LtaData
     {
         #region Properties
 

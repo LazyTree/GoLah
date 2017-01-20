@@ -18,8 +18,7 @@ namespace GoLah.ViewModel
 
         private async void GetBusStopsAsync()
         {
-            var repo = new LtaDataRepository();
-            await repo.GetBusStopsAsync();
+            await new LtaDataRepository<BusStop>().QueryAsync();
         }
     }
 }

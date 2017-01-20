@@ -65,8 +65,14 @@ namespace GoLah.ViewModel
 
         private async void LoadDataAsync()
         {
-            var repository = new LtaDataRepository();
-            var routes = await repository.GetBusRoutesAsync();
+            // Filter and add stops for each bus route
+            var routes = await new LtaDataRepository<BusRoute>().QueryAsync().ConfigureAwait(false);
+            var routestops = await new LtaDataRepository<BusRouteStop>().QueryAsync().ConfigureAwait(false);
+            routes.ToList().ForEach(x => x.BusStopCodes =
+                routestops.Where(s => s.ServiceNo == x.ServiceNo && s.Direction == x.Direction)
+                .OrderBy(s => s.StopSequence)
+                .Select(s => s.BusStopCode)
+                .ToList());
             AllBusServices = new ObservableCollection<BusService>(await MergeBusRoutesToBusServiceAsync(routes));
             SelectedBusService = AllBusServices.First();
         }
@@ -79,9 +85,7 @@ namespace GoLah.ViewModel
         /// <returns></returns>
         private async Task<IEnumerable<BusService>> MergeBusRoutesToBusServiceAsync(IEnumerable<BusRoute> busRoutes)
         {
-            var repository = new LtaDataRepository();
-
-            var allStops = await repository.GetBusStopsAsync();
+            var allStops = await new LtaDataRepository<BusStop>().QueryAsync();
 
             var groups = busRoutes.GroupBy(x => x.ServiceNo);
 

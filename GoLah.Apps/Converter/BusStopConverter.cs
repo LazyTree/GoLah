@@ -1,4 +1,5 @@
-﻿using GoLah.Services;
+﻿using GoLah.Model;
+using GoLah.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace GoLah.Apps.Converter
                 return string.Empty;
             }
 
-            var repo = new LtaDataRepository();
-
-            return repo.GetBusStopByCodeAsync(value.ToString()).Result?.Description ?? value.ToString();
+            var repo = new LtaDataRepository<BusStop>();
+            Func<BusStop, bool> predicate = (x) => x.Code.Equals(value.ToString());  
+            return repo.GetAsync(predicate).Result?.Description ?? value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
