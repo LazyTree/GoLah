@@ -100,7 +100,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converter\BusStopConverter.cs" />
+    <Compile Include="Converter\OperatorToLogoConverter.cs" />
     <Compile Include="Converter\InvertBooleanToVisibilityConverter.cs" />
     <Compile Include="View\BusServicesPage.xaml.cs">
       <DependentUpon>BusServicesPage.xaml</DependentUpon>
@@ -122,9 +122,11 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\SBS.png" />
-    <EmbeddedResource Include="Images\SMRT.png" />
     <Content Include="Assets\mappin.png" />
+    <Content Include="Images\GAS_50x50.png" />
+    <Content Include="Images\SBST_50x50.png" />
+    <Content Include="Images\SMRT_50x50.png" />
+    <Content Include="Images\TTS_50x50.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

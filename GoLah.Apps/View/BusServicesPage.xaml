@@ -12,11 +12,10 @@
     <Page.Resources>
         <Converter:BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
         <Converter:InvertBooleanToVisibilityConverter x:Key="InvertBoolToVisibility"/>
-        <Converter:BusStopConverter x:Key="BusStopConverter"/>
+        <Converter:OperatorToLogoConverter x:Key="OperatorLogoConverter"/>
 
         <DataTemplate x:Key="BusServiceTemplate">
-
-            <Grid Width="{Binding Path=Width, RelativeSource={RelativeSource Mode=TemplatedParent} }" Margin="2,5,2,0">
+            <Grid Width="{Binding Width, RelativeSource={RelativeSource Mode=TemplatedParent}}" Margin="2,5,2,0">
                 <Line X1="0" X2="320" Y1="3" Y2="3" Stroke="Black" StrokeThickness="1"/>
                 <StackPanel Margin="0,2,0,0">
                     <TextBlock x:Name="tbServiceNo" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding ServiceNo}"  FontWeight="Bold" FontSize="15" d:LayoutOverrides="TopPosition, BottomPosition"/>
@@ -25,7 +24,7 @@
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="Operator" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Operator}" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Width="40"/>
+                        <Image x:Name="Operator" Grid.Column="0" Width="50" Height="50" Source="{Binding OperatorImage}"/>
                         <Grid x:Name="BidirectionalBus" Visibility="{Binding IsLoop, Converter={StaticResource InvertBoolToVisibility}}" Grid.Column="1" d:LayoutOverrides="Width, LeftPosition, RightPosition">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -57,7 +56,7 @@
                             <TextBlock x:Name="tbLoopDescription" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="WrapWholeWords" Text="{Binding LoopDescription}" FontSize="12" VerticalAlignment="Center"/>
                             <TextBlock x:Name="tbOriginDestTag" Grid.Row="1"  Text="Start/End at" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             <TextBlock x:Name="tbOriginDest" Grid.Row="1" TextWrapping="WrapWholeWords" Text="{Binding Directions[0].Origin}" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-          
+
                         </Grid>
                     </Grid>
                 </StackPanel>
@@ -101,7 +100,13 @@
                         SelectedItem="{Binding SelectedBusService, Mode=TwoWay}" 
                         HorizontalContentAlignment="Left"
                         HorizontalAlignment="Stretch"
-                        SelectionChanged="lvServices_SelectionChanged"/>
+                        SelectionChanged="lvServices_SelectionChanged">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Vertical"></ItemsStackPanel>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
                 </Grid>
             </SplitView.Pane>
             <SplitView.Content>
