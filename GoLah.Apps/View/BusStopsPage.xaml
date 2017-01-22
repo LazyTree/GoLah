@@ -5,12 +5,122 @@
     xmlns:local="using:GoLah.Apps.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
     xmlns:ViewModel="using:GoLah.ViewModel"
     mc:Ignorable="d">
     <Page.DataContext>
         <ViewModel:BusStopsPageViewModel/>
     </Page.DataContext>
+    <Page.Resources>
+        <DataTemplate x:Key="BusStopTemplate">
+            <Grid Width="{Binding Width, RelativeSource={RelativeSource Mode=TemplatedParent}}" Margin="2,5,2,0">
+                <Line X1="0" X2="320" Y1="3" Y2="3" Stroke="Black" StrokeThickness="1"/>
+                <StackPanel Margin="0,2,0,0">
+                    <TextBlock x:Name="tbStopCode" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding Code}"  FontWeight="Bold" FontSize="15" d:LayoutOverrides="TopPosition, BottomPosition"/>
+                    <TextBlock Text="{Binding Description}" />
+                    <TextBlock Text="{Binding RoadName}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="ArrivalBusServiceTemplate">
+            <Grid Width="{Binding Width, RelativeSource={RelativeSource Mode=TemplatedParent}}" Margin="2,5,2,0">
+                <Line X1="0" X2="320" Y1="3" Y2="3" Stroke="Black" StrokeThickness="1"/>
+                <StackPanel Margin="0,2,0,0">
+                    <TextBlock x:Name="tbStopCode" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding ServiceNo}" 
+                               FontWeight="Bold" FontSize="15" d:LayoutOverrides="TopPosition, BottomPosition"/>
+                    <TextBlock>
+                        <Run Text="Next Bus: " />
+                        <Run Text="{Binding NextBus.EstimatedArrivalInMin}" />
+                        <Run Text=" Mins" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Next Bus 2: " />
+                        <Run Text="{Binding SubsequentBus.EstimatedArrivalInMin}" />
+                        <Run Text=" Mins" />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run Text="Next Bus 3: " />
+                        <Run Text="{Binding SubsequentBus3.EstimatedArrivalInMin}" />
+                        <Run Text=" Mins" />
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button x:Name="BtnBusStopsPage" Content="Bus Stops Page" VerticalAlignment="Center" HorizontalAlignment="Center" Width="200" Height="100" FontSize="20" Background="#3337BF19"/>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ScreenSize">
+                <VisualState x:Name="Small">
+                    <VisualState.Setters>
+                        <Setter Target="splitView.(SplitView.DisplayMode)" Value="Overlay"/>
+                        <Setter Target="splitView.(SplitView.IsPaneOpen)" Value="False"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Medium">
+                    <VisualState.Setters>
+                        <Setter Target="splitView.(SplitView.IsPaneOpen)" Value="True"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="700"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <SplitView x:Name="splitView" DisplayMode="Inline" IsPaneOpen="True" OpenPaneLength="320">
+            <SplitView.Pane>
+                <Grid>
+                    <ListView 
+                        x:Name="lvBusStops"
+                        ItemsSource="{Binding AllBusStops, Mode=TwoWay}" 
+                        ItemTemplate="{StaticResource BusStopTemplate}" 
+                        SelectedItem="{Binding SelectedBusStop, Mode=TwoWay}" 
+                        HorizontalContentAlignment="Left"
+                        HorizontalAlignment="Stretch"
+                        SelectionChanged="lvBusStops_SelectionChanged">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Vertical"></ItemsStackPanel>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Background="Coral"  Grid.Row="0">
+                        <Maps:MapControl x:Name="myMap" 
+                                         MapServiceToken="26gqF2PKczATeqP4NL59~nQHrkiTXAN5BGCXl7ttS5Q~An_3ymPGsLumNz-EPvWc1fPWtWMfPK4jGCmDWnlVKC62QWMcwupCCwqJ0VNKwHKI"
+                                         HorizontalAlignment="Stretch" 
+                                         VerticalAlignment="Stretch" 
+                                         Loaded="myMap_Loaded" 
+                                         d:LayoutOverrides="Height"/>
+                    </Border>
+                    <Border Background="CadetBlue"  Grid.Row="1">
+                        <Grid Margin="100,0,100,0">
+                            <ListView 
+                        x:Name="lvArrivalBusServices"
+                        ItemsSource="{Binding ArrivalBusServices, Mode=TwoWay}" 
+                        ItemTemplate="{StaticResource ArrivalBusServiceTemplate}" 
+                        HorizontalContentAlignment="Left"
+                        HorizontalAlignment="Stretch">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <ItemsStackPanel Orientation="Vertical"></ItemsStackPanel>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                            </ListView>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
     </Grid>
 </Page>

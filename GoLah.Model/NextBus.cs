@@ -44,5 +44,10 @@ namespace GoLah.Model
         /// Indicates wheel-chair accessible bus.
         /// </summary>
         public string Feature { get; set; }
+
+        /// <summary>
+        /// Interval in minutes for next bus
+        /// </summary>
+        public int EstimatedArrivalInMin => EstimatedArrival == null ? 0 : (int)(EstimatedArrival - DateTime.Now).Value.TotalMinutes;
     }
 }
