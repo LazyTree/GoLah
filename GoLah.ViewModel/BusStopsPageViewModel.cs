@@ -17,7 +17,31 @@ namespace GoLah.ViewModel
 
         public BusStopsPageViewModel()
         {
-            GetBusStopsAsync();
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            {
+                _allBusStops = new ObservableCollection<BusStop>
+                {
+                    new BusStop
+                    {
+                        Code = "11111",
+                        Description = "BusStop1"
+                    },
+                    new BusStop
+                    {
+                        Code = "22222",
+                        Description = "BusStop2"
+                    },
+                    new BusStop
+                    {
+                        Code = "33333",
+                        Description = "BusStop3"
+                    },
+                };
+            }
+            else
+            {
+                GetBusStopsAsync();
+            }
         }
 
         public ObservableCollection<BusStop> AllBusStops
