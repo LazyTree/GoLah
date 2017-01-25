@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Imaging;
-using GoLah.Model;
 
 namespace GoLah.Apps.Converter
 {
@@ -45,26 +44,6 @@ namespace GoLah.Apps.Converter
             var image = new BitmapImage(new Uri(uri));
 
             return image;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class BusStopConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (!(value is string) || string.IsNullOrEmpty(value.ToString()))
-            {
-                return string.Empty;
-            }
-
-            var repo = new LtaDataRepository<BusStop>();
-            Func<BusStop, bool> predicate = (x) => x.Code.Equals(value.ToString());
-            return repo.GetAsync(predicate).Result?.Description ?? value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

@@ -53,5 +53,10 @@ namespace GoLah.Model
         public NextBus SubsequentBus3 { get; set; }
 
         public override string ServiceUrl => "BusArrival?BusStopID={0}";
+
+        public override string ToString()
+        {
+            return string.Format($"{ServiceNo}: {NextBus?.EstimatedArrivalInMin} min, {SubsequentBus?.EstimatedArrivalInMin} min, {SubsequentBus3.EstimatedArrivalInMin} min");
+        }
     }
 }

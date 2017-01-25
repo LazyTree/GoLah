@@ -23,19 +23,34 @@ namespace GoLah.BackgroundService
 
         private async Task SendNotification()
         {
-            var buses = await new LtaDataRepository<BusRoute>().QueryAsync();
-            var stops = await new LtaDataRepository<BusStop>().QueryAsync();
-            var routeStops = await new LtaDataRepository<BusRouteStop>().QueryAsync();
+            IEnumerable<ArrivalBusService> arrivalBuses;
+            if (DateTime.Now.Hour < 18) return;
+
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            var busStopCode = localSettings.Values["busStopCode"].ToString();
+            var notificationMessage = new StringBuilder();
+            if (!string.IsNullOrEmpty(busStopCode))
+            {
+                arrivalBuses = await new LtaDataRepositoryBase<ArrivalBusService>().QueryAsync(true, busStopCode);
+                if (arrivalBuses.Any())
+                {
+                    arrivalBuses.ToList().ForEach(x => notificationMessage.AppendLine(x.ToString()));
+                }
+            }
 
             var notifier = ToastNotificationManager.CreateToastNotifier();
             var content = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
             var text = content.GetElementsByTagName("text");
-            text[0].InnerText = $"There are {buses.Count()} buses and {stops.Count()} stops and {routeStops.Count()} route stops retrieved.";
+            text[0].InnerText = $"BusStop {busStopCode}";
+            text[1].InnerText = notificationMessage.ToString();
             notifier.Show(new ToastNotification(content));
         }
 
         public static async void Register()
         {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values["busStopCode"] = "53121";
+
             var isRegistered = BackgroundTaskRegistration.AllTasks.Values.Any(t => t.Name == nameof(GoLahBackgroundTask));
             if (isRegistered) return;
 
@@ -47,7 +62,7 @@ namespace GoLah.BackgroundService
                 Name = nameof(GoLahBackgroundTask),
                 TaskEntryPoint = $"{nameof(GoLah)}.{nameof(BackgroundService)}.{nameof(GoLahBackgroundTask)}"
             };
-            builder.SetTrigger(new TimeTrigger(120, false));
+            builder.SetTrigger(new TimeTrigger(3, false));
             builder.Register();
         }
     }
